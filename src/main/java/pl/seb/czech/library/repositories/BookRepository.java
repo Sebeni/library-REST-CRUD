@@ -1,12 +1,12 @@
-package pl.seb.czech.bibliotheca.repositories;
+package pl.seb.czech.library.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import pl.seb.czech.bibliotheca.domain.TitleInfo;
+import pl.seb.czech.library.domain.Book;
 
 import javax.transaction.Transactional;
 
 @Transactional
 @Repository
-public interface TitleInfoRepository extends CrudRepository<TitleInfo, Long> {
+public interface BookRepository extends CrudRepository<Book, Long> {
 }

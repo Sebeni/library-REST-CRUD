@@ -1,4 +1,4 @@
-package pl.seb.czech.bibliotheca.domain;
+package pl.seb.czech.library.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -6,6 +6,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -20,26 +22,28 @@ public class User {
     
    
     @NotNull
-    private String name;
+    private String firstName;
 
     @Column(name = "last_name")
     @NotNull
     private String lastName;
     
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_on", insertable = false, updatable = false)
-    @org.hibernate.annotations.CreationTimestamp
-    private Date createdOn;
     
-    @OneToOne(
+    @Column(name = "created_on", updatable = false)
+    @org.hibernate.annotations.CreationTimestamp
+    private LocalDateTime createdOn;
+    
+    @OneToMany(
             mappedBy = "user",
-            cascade = CascadeType.REMOVE
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY,
+            targetEntity = Rent.class
     )
-    private Rent rent;
+    private Set<Rent> rents = new HashSet<>();
 
     
-    public User(String name, String lastName) {
-        this.name = name;
+    public User(String firstName, String lastName) {
+        this.firstName = firstName;
         this.lastName = lastName;
     }
 }

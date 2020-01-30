@@ -1,8 +1,8 @@
-package pl.seb.czech.bibliotheca.repositories;
+package pl.seb.czech.library.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import pl.seb.czech.bibliotheca.domain.User;
+import pl.seb.czech.library.domain.User;
 
 import javax.transaction.Transactional;
 

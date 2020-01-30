@@ -1,4 +1,4 @@
-package pl.seb.czech.bibliotheca.domain;
+package pl.seb.czech.library.domain;
 
 public enum BookStatus {
     AVAILABLE,

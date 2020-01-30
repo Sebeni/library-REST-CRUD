@@ -1,4 +1,4 @@
-package pl.seb.czech.bibliotheca.domain;
+package pl.seb.czech.library.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +32,9 @@ public class Book {
     
     @OneToOne(mappedBy = "book")
     private Rent rent;
-    
-    
+
+
+    public Book(@NotNull BookStatus bookStatus) {
+        this.bookStatus = bookStatus;
+    }
 }

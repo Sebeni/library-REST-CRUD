@@ -1,13 +1,13 @@
-package pl.seb.czech.bibliotheca;
+package pl.seb.czech.library;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BibliothecaApplication {
+public class LibraryApp {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BibliothecaApplication.class, args);
+		SpringApplication.run(LibraryApp.class, args);
 	}
 
 }

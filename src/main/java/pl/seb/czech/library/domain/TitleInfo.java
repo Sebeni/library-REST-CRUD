@@ -1,4 +1,4 @@
-package pl.seb.czech.bibliotheca.domain;
+package pl.seb.czech.library.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,12 +7,14 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
+
 @Entity
 @Table(name = "titles_info")
 public class TitleInfo {
@@ -35,9 +37,16 @@ public class TitleInfo {
     @OneToMany(
             targetEntity = Book.class,
             mappedBy = "titleInfo",
-            cascade = CascadeType.ALL,
+            cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY
     )
-    private List<Book> bookList;
+    private List<Book> bookList = new ArrayList<>();
+    
+    public TitleInfo(String title, String author, Integer publicationYear) {
+        this.title = title;
+        this.author = author;
+        this.publicationYear = publicationYear;
+    }
+    
     
 }
