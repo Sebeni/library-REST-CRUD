@@ -4,10 +4,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 @NoArgsConstructor
 @Getter
@@ -19,7 +21,6 @@ public class User {
     @GeneratedValue
     @NotNull
     private Long id;
-    
    
     @NotNull
     private String firstName;
@@ -28,22 +29,46 @@ public class User {
     @NotNull
     private String lastName;
     
+    @Column(name = "birthDate")
+    @NotNull
+    private LocalDate birthDate;
     
-    @Column(name = "created_on", updatable = false)
-    @org.hibernate.annotations.CreationTimestamp
-    private LocalDateTime createdOn;
+    @Column(
+            name = "created_on",
+            updatable = false
+    )
+    private LocalDateTime createdOn = LocalDateTime.now();
     
     @OneToMany(
-            mappedBy = "user",
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY,
-            targetEntity = Rent.class
+            targetEntity = Rent.class,
+            mappedBy = "user"
     )
     private Set<Rent> rents = new HashSet<>();
-
     
-    public User(String firstName, String lastName) {
+    
+    @Column(name = "fine_to_pay")
+    private double fine;
+    
+    public User(String firstName, String lastName, LocalDate birthDate) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.birthDate = birthDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return firstName.equals(user.firstName) &&
+                lastName.equals(user.lastName) &&
+                birthDate.equals(user.birthDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, birthDate);
     }
 }
