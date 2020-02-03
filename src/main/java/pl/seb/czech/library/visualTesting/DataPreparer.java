@@ -47,6 +47,7 @@ public class DataPreparer {
         TitleInfo plague = new TitleInfo("Plague", "Albert Camus", 1947, 7.99);
         TitleInfo catch22 = new TitleInfo("Catch 22", "Joseph Heller", 1961, 11.99);
         TitleInfo cuckoo = new TitleInfo("One Flew Over the Cuckoo’s Nest", "Ken Kesey", 1962, 11.49);
+        TitleInfo farm = new TitleInfo("Animal Farm", "Georg Orwell", 1945, 12.99);
         titleInfoList = Arrays.asList(it, braveNW, year1984, plague, catch22, cuckoo);
         titleInfoRepository.saveAll(titleInfoList);
 
@@ -74,12 +75,12 @@ public class DataPreparer {
         }
 
 
-        User user1 = new User("John", "Smith", LocalDate.of(1, 1, 1));
-        User user2 = new User("Atilla", "Hun", LocalDate.of(2, 2, 2));
-        User user3 = new User("Julius", "Caesar", LocalDate.of(3, 3, 3));
-        User user4 = new User("Sun", "Tzu", LocalDate.of(4, 4, 4));
-        User user5 = new User("Cornelius", "Sulla", LocalDate.of(5, 5, 5));
-        User user6 = new User("Gaius", "Marius", LocalDate.of(6, 6, 6));
+        User user1 = new User("John", "Smith", LocalDate.of(2001, 1, 1));
+        User user2 = new User("Atilla", "Hun", LocalDate.of(2002, 2, 2));
+        User user3 = new User("Julius", "Caesar", LocalDate.of(2003, 3, 3));
+        User user4 = new User("Sun", "Tzu", LocalDate.of(2004, 4, 4));
+        User user5 = new User("Cornelius", "Sulla", LocalDate.of(2005, 5, 5));
+        User user6 = new User("Gaius", "Marius", LocalDate.of(2006, 6, 6));
 
 
         userList = Arrays.asList(user1, user2, user3, user4, user5, user6);

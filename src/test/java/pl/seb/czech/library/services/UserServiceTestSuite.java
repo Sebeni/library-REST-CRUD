@@ -1,13 +1,12 @@
 package pl.seb.czech.library.services;
 
-import org.aspectj.lang.annotation.After;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.seb.czech.library.domain.User;
+import pl.seb.czech.library.repositories.BookRepository;
 import pl.seb.czech.library.service.DataNotFoundException;
 import pl.seb.czech.library.service.UserService;
 import pl.seb.czech.library.visualTesting.DataPreparer;
@@ -22,7 +21,7 @@ public class UserServiceTestSuite {
     UserService userService;
     @Autowired
     DataPreparer dataPreparer;
-
+   
 
     @BeforeEach
     public void populateData() {
@@ -53,9 +52,24 @@ public class UserServiceTestSuite {
                 () -> assertEquals(DataPreparer.getUserList().size(), userService.findAllUsers().size()),
                 () -> assertThrows(DataNotFoundException.class, () -> userService.findUserById(id))
         );
-        
-        
     }
+    
+    @Test
+    public void addUserWithStrings() {
+        String firstName = "String";
+        String lastName = "User";
+        
+        userService.addUser(firstName, lastName, "11012020");
+        
+        User user = userService.findUserByName(firstName, lastName);
+        Long id = user.getId();
+
+        assertEquals(DataPreparer.getUserList().size() + 1, userService.findAllUsers().size());
+        
+        userService.deleteUser(id);
+
+        assertEquals(DataPreparer.getUserList().size(), userService.findAllUsers().size());
 
 
+    }
 }

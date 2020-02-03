@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import pl.seb.czech.library.domain.User;
 import pl.seb.czech.library.repositories.UserRepository;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @AllArgsConstructor
@@ -14,6 +16,13 @@ public class UserService {
 
     public void addUser(User user) {
         userRepository.save(user);
+    }
+    
+    
+    public void addUser(String firstName, String lastName, String ddMMyyyy) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        LocalDate dob = LocalDate.parse(ddMMyyyy, formatter);
+        userRepository.save(new User(firstName, lastName, dob));
     }
 
     public void deleteUser(Long id) {
@@ -25,7 +34,7 @@ public class UserService {
     }
 
     public User findUserByName(String firstName, String lastName) throws DataNotFoundException {
-        return userRepository.findByFirstNameAndLastName(firstName, lastName).orElseThrow(DataNotFoundException::new);
+        return userRepository.findByFirstNameAndLastName(firstName.trim(), lastName.trim()).orElseThrow(DataNotFoundException::new);
     }
     
     public List<User> findAllUsers() {

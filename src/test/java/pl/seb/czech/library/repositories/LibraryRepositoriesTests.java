@@ -6,14 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import pl.seb.czech.library.domain.Book;
+
 import pl.seb.czech.library.domain.Rent;
 import pl.seb.czech.library.domain.TitleInfo;
 import pl.seb.czech.library.domain.User;
 import pl.seb.czech.library.visualTesting.DataPreparer;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,16 +59,13 @@ class LibraryRepositoriesTests {
 
     @Test
     void userNameEqualityTest() {
-        List<User> userListFromDB = userRepository.findAll();
         List<User> userListInput = DataPreparer.getUserList();
-        Assertions.assertTrue(onlyNames(userListInput).containsAll(onlyNames(userListFromDB)));
+        List<User> userListFromDB = userRepository.findAll();
+        
+        Assertions.assertTrue(userListInput.containsAll(userListFromDB));
     }
 
-    private List<String> onlyNames(List<User> userList) {
-        return userList.stream()
-                .map(user -> user.getFirstName() + user.getLastName())
-                .collect(Collectors.toList());
-    }
+ 
 
     @Test
     void titleInfoEqualityTest() {
@@ -81,12 +77,16 @@ class LibraryRepositoriesTests {
 
     @Test
     void rentDateEqualityTest() {
-        List<Rent> rentsDB = rentRepository.findAll();
         List<Rent> rentsInput = DataPreparer.getRentList();
-
-        Assertions.assertTrue(extractInitDate(rentsDB).containsAll(extractInitDate(rentsInput)));
-
-
+        List<Rent> rentsDB = rentRepository.findAll();
+        
+        Assertions.assertAll(
+                () -> Assertions.assertTrue(extractInitDate(rentsInput).containsAll(extractInitDate(rentsDB))),
+                () -> Assertions.assertTrue(extractUser(rentsInput).containsAll(extractUser(rentsDB))),
+                () -> Assertions.assertTrue(rentsInput.containsAll(rentsDB))
+        );
+        
+        
     }
 
     private List<LocalDate> extractInitDate(List<Rent> rentList) {
@@ -94,6 +94,14 @@ class LibraryRepositoriesTests {
                 .map(rent -> rent.getRentDate())
                 .collect(Collectors.toList());
     }
+    
+    private List<User> extractUser(List<Rent> rentList) {
+        return rentList.stream()
+                .map(rent -> rent.getUser())
+                .collect(Collectors.toList());
+    }
+    
+    
 
 
 }

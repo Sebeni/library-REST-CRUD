@@ -31,6 +31,7 @@ public class Book {
     
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private BookStatus bookStatus;
     
     @OneToOne(mappedBy = "book")
@@ -41,18 +42,24 @@ public class Book {
         this.titleInfo = titleInfo;
         this.bookStatus = bookStatus;
     }
+    
+    @PreRemove
+    private void removeTitleInfo() {
+        this.titleInfo = null;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return titleInfo.equals(book.titleInfo) &&
+        return Objects.equals(id, book.id) &&
+                titleInfo.equals(book.titleInfo) &&
                 bookStatus == book.bookStatus;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(titleInfo, bookStatus);
+        return Objects.hash(id, titleInfo, bookStatus);
     }
 }

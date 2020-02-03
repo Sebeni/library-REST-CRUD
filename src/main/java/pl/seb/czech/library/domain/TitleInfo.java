@@ -17,6 +17,10 @@ import java.util.Objects;
 @Setter
 
 
+//@NamedNativeQuery(
+//        name = "TitleInfo.getNumOfBooksAvb",
+//        query = "
+//)
 @Entity
 @Table(name = "titles_info")
 public class TitleInfo {
@@ -43,7 +47,8 @@ public class TitleInfo {
             targetEntity = Book.class,
             mappedBy = "titleInfo",
             cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
+            fetch = FetchType.EAGER,
+            orphanRemoval = true
     )
     private List<Book> bookList = new ArrayList<>();
     
