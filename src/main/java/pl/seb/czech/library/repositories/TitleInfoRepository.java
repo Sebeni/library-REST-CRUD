@@ -37,9 +37,6 @@ public interface TitleInfoRepository extends CrudRepository<TitleInfo, Long> {
     )
     long getNumOfBooksAvb(@Param("TITLE")String title);
 
-
-
-
     @Query(
             value = "SELECT COUNT(*) FROM BOOKS B" +
                     " INNER JOIN TITLES_INFO T" +

@@ -51,6 +51,8 @@ public class BookServiceTestSuite {
                 .filter(book -> book.getTitleInfo().getTitle().equals(title) && book.getTitleInfo().getAuthor().equals(author))
                 .count();
         
+        
+        
         Book bookToAdd = bookService.addNewBook(title, author, publicationYear);
         long idBookToAdd = bookToAdd.getId();
 
@@ -64,12 +66,13 @@ public class BookServiceTestSuite {
         
         assertAll(
                 () ->   assertEquals(BookStatus.RENTED, bookService.findById(idBookToAdd).getBookStatus()),
-                () ->   assertEquals(idBookToAdd, bookAfterChange.getId())
-                
+                () ->   assertEquals(idBookToAdd, bookAfterChange.getId()),
+                () ->   assertThrows(IllegalArgumentException.class, () -> bookService.deleteById(idBookToAdd))
         );
-      
         
+        bookService.changeBookStatus(idBookToAdd, BookStatus.AVAILABLE);
         bookService.deleteById(idBookToAdd);
+        
         assertEquals(bookInputNumCount, titleInfoRepository.getNumOfAllBooks(title));
     }
 }

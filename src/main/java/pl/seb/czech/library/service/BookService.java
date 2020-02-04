@@ -51,11 +51,13 @@ public class BookService {
         
         if(bookOptional.isPresent()){
             Book bookToDelete = bookOptional.get();
-
-            TitleInfo titleInfo = titleInfoRepository.findById(bookToDelete.getTitleInfo().getId()).orElseThrow(DataNotFoundException::new);
-            titleInfo.getBookList().remove(bookToDelete);
-
-            titleInfoRepository.save(titleInfo);
+            if(bookToDelete.getBookStatus() != BookStatus.RENTED) {
+                TitleInfo titleInfo = titleInfoRepository.findById(bookToDelete.getTitleInfo().getId()).orElseThrow(DataNotFoundException::new);
+                titleInfo.getBookList().remove(bookToDelete);
+                titleInfoRepository.save(titleInfo);
+            } else {
+                throw new IllegalArgumentException("Book is rented so it can't be deleted");
+            }
         } else {
             throw new DataNotFoundException("No book was found with id = " + id);
         }
