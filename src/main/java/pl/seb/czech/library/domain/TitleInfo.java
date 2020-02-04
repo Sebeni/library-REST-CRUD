@@ -15,12 +15,6 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
-
-
-//@NamedNativeQuery(
-//        name = "TitleInfo.getNumOfBooksAvb",
-//        query = "
-//)
 @Entity
 @Table(name = "titles_info")
 public class TitleInfo {

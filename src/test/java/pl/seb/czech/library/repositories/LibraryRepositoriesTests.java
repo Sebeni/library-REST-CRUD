@@ -101,6 +101,16 @@ class LibraryRepositoriesTests {
                 .collect(Collectors.toList());
     }
     
+    @Test
+    public void countRentsByUserId() {
+        long userId = DataPreparer.getUserList().get(0).getId();
+        long countRentedBooksWithUserId = DataPreparer.getRentList().stream()
+                .filter(rent -> rent.getUser().getId().equals(userId))
+                .count();
+        
+        Assertions.assertEquals(countRentedBooksWithUserId, rentRepository.countByUserId(userId));
+    }
+    
     
 
 

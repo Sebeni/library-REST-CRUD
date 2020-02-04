@@ -1,14 +1,16 @@
 package pl.seb.czech.library.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Service;
 import pl.seb.czech.library.domain.Book;
 import pl.seb.czech.library.domain.BookStatus;
 import pl.seb.czech.library.domain.TitleInfo;
+import pl.seb.czech.library.domain.User;
 import pl.seb.czech.library.repositories.BookRepository;
 import pl.seb.czech.library.repositories.TitleInfoRepository;
+import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 
@@ -19,54 +21,64 @@ public class BookService {
     private TitleInfoRepository titleInfoRepository;
 
     public Book addNewBook(String title, String authorName, Integer publicationYear) throws DataNotFoundException {
-        Optional<TitleInfo> titleInfo =  titleInfoRepository.findByTitleAndAuthorAndPublicationYear(title, authorName, publicationYear);
-        if(titleInfo.isPresent()) {
+        Optional<TitleInfo> titleInfo = titleInfoRepository.findByTitleAndAuthorAndPublicationYear(title, authorName, publicationYear);
+        if (titleInfo.isPresent()) {
             TitleInfo current = titleInfo.get();
-            
+
             Book bookToAdd = new Book(current, BookStatus.AVAILABLE);
             current.getBookList().add(bookToAdd);
             current = titleInfoRepository.save(current);
-            return current.getBookList().get(current.getBookList().size()-1);
+            return current.getBookList().get(current.getBookList().size() - 1);
         } else {
             throw new DataNotFoundException(String.format("No title was found with these parameters: author - %s, title - %s, publication year - %d", authorName, title, publicationYear));
         }
     }
-    
-    public Book changeBookStatus(Long id, BookStatus changedStatus) throws DataNotFoundException {
-        Optional<Book> bookOptional = bookRepository.findById(id);
-        
-        if(bookOptional.isPresent()) {
-            Book book = bookOptional.get();
-            book.setBookStatus(changedStatus);
-            bookRepository.save(book);
-            return book;
-        } else {
-            throw new DataNotFoundException("No book was found with id = " + id);
-        }
-        
+
+    public Book changeBookStatusById(Long id, BookStatus changedStatus) throws DataNotFoundException {
+        Book book = findById(id);
+        return changeBookStatusByBook(book, changedStatus);
     }
-    
+
+    public Book changeBookStatusByBook(Book book, BookStatus changedStatus) {
+        book.setBookStatus(changedStatus);
+        return bookRepository.save(book);
+    }
+
     public void deleteById(Long id) {
-        Optional<Book> bookOptional = bookRepository.findById(id);
-        
-        if(bookOptional.isPresent()){
-            Book bookToDelete = bookOptional.get();
-            if(bookToDelete.getBookStatus() != BookStatus.RENTED) {
-                TitleInfo titleInfo = titleInfoRepository.findById(bookToDelete.getTitleInfo().getId()).orElseThrow(DataNotFoundException::new);
-                titleInfo.getBookList().remove(bookToDelete);
-                titleInfoRepository.save(titleInfo);
-            } else {
-                throw new IllegalArgumentException("Book is rented so it can't be deleted");
-            }
+        Book bookToDelete = findById(id);
+        if (bookToDelete.getBookStatus() != BookStatus.RENTED) {
+            TitleInfo titleInfo = titleInfoRepository.findById(bookToDelete.getTitleInfo().getId()).orElseThrow(DataNotFoundException::new);
+            titleInfo.getBookList().remove(bookToDelete);
+            titleInfoRepository.save(titleInfo);
         } else {
-            throw new DataNotFoundException("No book was found with id = " + id);
+            throw new IllegalArgumentException("Book is rented so it can't be deleted");
         }
-        
-        
     }
-    
+
     public Book findById(Long id) {
         return bookRepository.findById(id).orElseThrow(() -> new DataNotFoundException("No book was found with id = " + id));
     }
+
+    public User findWhoRented(Long bookId) {
+        Book book = findById(bookId);
+        if (book.getBookStatus().equals(BookStatus.RENTED)) {
+            return book.getRent().getUser();
+        } else {
+            throw new DataNotFoundException("This book is not rented");
+        }
+    }
     
+    public LocalDate findWhenReturned(Long bookId) {
+        Book book = findById(bookId);
+        if (book.getBookStatus().equals(BookStatus.RENTED)) {
+            return book.getRent().getDueDate();
+        } else {
+            throw new DataNotFoundException("This book is not rented");
+        }
+    }
+    
+    public void saveBook(Book bookToSave){
+        bookRepository.save(bookToSave);
+    }
+
 }

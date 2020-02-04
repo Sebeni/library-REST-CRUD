@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.seb.czech.library.domain.User;
-import pl.seb.czech.library.repositories.BookRepository;
-import pl.seb.czech.library.service.DataNotFoundException;
+import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.service.UserService;
 import pl.seb.czech.library.visualTesting.DataPreparer;
 
@@ -19,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserServiceTestSuite {
     @Autowired
     UserService userService;
+
     @Autowired
     DataPreparer dataPreparer;
-   
 
     @BeforeEach
     public void populateData() {
@@ -32,13 +31,16 @@ public class UserServiceTestSuite {
     public void cleanUp() {
         dataPreparer.cleanUp();
     }
+   
+
+  
     
     @Test
     public void addFindDeleteUserTest() {
         String firstName = "Added";
         String lastName = "User";
         User user = new User(firstName, lastName, LocalDate.now());
-        userService.addUser(user);
+        userService.saveUser(user);
         Long id = user.getId();
         
         assertAll(
@@ -69,7 +71,18 @@ public class UserServiceTestSuite {
         userService.deleteUser(id);
 
         assertEquals(DataPreparer.getUserList().size(), userService.findAllUsers().size());
-
-
+        
+    }
+    
+    @Test
+    public void addAndPayFine() {
+        long userId = DataPreparer.getUserList().get(0).getId();
+        
+        User user = userService.findUserById(userId);
+        double accountBefore = user.getFine();
+        user = userService.addFine(user, 10);
+        assertEquals(accountBefore + 10, user.getFine());
+        user = userService.payFine(user, 5);
+        assertEquals(accountBefore + 5, user.getFine());
     }
 }

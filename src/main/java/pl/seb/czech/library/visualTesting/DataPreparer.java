@@ -15,6 +15,9 @@ import java.util.List;
 @Component
 public class DataPreparer {
     private static boolean dbInit = false;
+  
+    
+    
     private static List<User> userList = new ArrayList<>();
     private static List<TitleInfo> titleInfoList = new ArrayList<>();
     private static List<Book> bookList = new ArrayList<>();
@@ -48,7 +51,7 @@ public class DataPreparer {
         TitleInfo catch22 = new TitleInfo("Catch 22", "Joseph Heller", 1961, 11.99);
         TitleInfo cuckoo = new TitleInfo("One Flew Over the Cuckoo’s Nest", "Ken Kesey", 1962, 11.49);
         TitleInfo farm = new TitleInfo("Animal Farm", "Georg Orwell", 1945, 12.99);
-        titleInfoList = Arrays.asList(it, braveNW, year1984, plague, catch22, cuckoo);
+        titleInfoList = Arrays.asList(it, braveNW, year1984, plague, catch22, cuckoo, farm);
         titleInfoRepository.saveAll(titleInfoList);
 
         int numOfBooksOfEachTitle = 10;
@@ -93,8 +96,7 @@ public class DataPreparer {
             Rent rent = new Rent(user, book);
             rentRepository.save(rent);
             rentList.add(rent);
-
-            user.getRents().add(rent);
+            
             userRepository.save(user);
 
             book.setRent(rent);
@@ -104,15 +106,15 @@ public class DataPreparer {
 
     public void cleanUp() {
         try {
-            titleInfoRepository.deleteAll(titleInfoList);
-            bookRepository.deleteAll(bookList);
-            userRepository.deleteAll(userList);
-            rentRepository.deleteAll(rentList);
+            bookRepository.deleteAll();
+            rentRepository.deleteAll();
+            titleInfoRepository.deleteAll();
+            userRepository.deleteAll();
 
-            titleInfoList.clear();
             bookList.clear();
-            userList.clear();
             rentList.clear();
+            titleInfoList.clear();
+            userList.clear();
 
             dbInit = false;
 
@@ -122,25 +124,21 @@ public class DataPreparer {
 
 
     }
-
-
-    public static boolean isDbInit() {
-        return dbInit;
-    }
+    
 
     public static List<User> getUserList() {
-        return userList;
+        return new ArrayList<>(userList);
     }
 
     public static List<TitleInfo> getTitleInfoList() {
-        return titleInfoList;
+        return new ArrayList<>(titleInfoList);
     }
 
     public static List<Book> getBookList() {
-        return bookList;
+        return new ArrayList<>(bookList);
     }
 
     public static List<Rent> getRentList() {
-        return rentList;
+        return new ArrayList<>(rentList);
     }
 }

@@ -1,19 +1,26 @@
 package pl.seb.czech.library.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.seb.czech.library.domain.TitleInfo;
 import pl.seb.czech.library.repositories.TitleInfoRepository;
+import pl.seb.czech.library.service.exceptions.DataAlreadyFoundException;
+import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class TitleInfoService {
-    @Autowired
-    TitleInfoRepository titleInfoRepository;
+    private TitleInfoRepository titleInfoRepository;
     
     public long getNumOfAvailableBooks(String title) {
         return titleInfoRepository.getNumOfBooksAvb(title.trim());
+    }
+    
+    public long getNumOfAllBooks(String title)  {
+        return titleInfoRepository.getNumOfAllBooks(title.trim());
     }
     
     public List<TitleInfo> findByAuthor(String authorsName) {

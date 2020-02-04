@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import pl.seb.czech.library.service.BookService;
+import pl.seb.czech.library.service.RentService;
 
 @Component
 public class ForH2Debug implements ApplicationListener<ContextRefreshedEvent> {
@@ -15,6 +16,9 @@ public class ForH2Debug implements ApplicationListener<ContextRefreshedEvent> {
     
     @Autowired
     BookService bookService;
+    
+    @Autowired
+    RentService rentService;
     
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {

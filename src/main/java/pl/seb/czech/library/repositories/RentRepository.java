@@ -11,5 +11,8 @@ import java.util.List;
 @Repository
 public interface RentRepository extends CrudRepository<Rent, Long> {
     
-    List<Rent> findAll(); 
+    List<Rent> findAll();
+    
+    Long countByUserId(Long userId);
+    
 }

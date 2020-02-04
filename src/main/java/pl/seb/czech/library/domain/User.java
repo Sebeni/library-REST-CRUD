@@ -2,6 +2,8 @@ package pl.seb.czech.library.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @Getter
 @Entity
 @Table(name = "users")
+@Setter
 public class User {
     
     @Id
@@ -38,14 +41,6 @@ public class User {
             updatable = false
     )
     private LocalDateTime createdOn = LocalDateTime.now();
-    
-    @OneToMany(
-            cascade = CascadeType.REMOVE,
-            fetch = FetchType.LAZY,
-            targetEntity = Rent.class,
-            mappedBy = "user"
-    )
-    private Set<Rent> rents = new HashSet<>();
     
     
     @Column(name = "fine_to_pay")
@@ -71,4 +66,14 @@ public class User {
     public int hashCode() {
         return Objects.hash(firstName, lastName, birthDate);
     }
+    
+    
+    public void addToFine(double howMuch) {
+        fine += howMuch;
+    }
+    
+    public void payFine(double howMuch) {
+        fine -= howMuch;
+    }
+    
 }

@@ -9,8 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import pl.seb.czech.library.domain.BookStatus;
 import pl.seb.czech.library.domain.TitleInfo;
 import pl.seb.czech.library.repositories.TitleInfoRepository;
-import pl.seb.czech.library.service.DataAlreadyFoundException;
-import pl.seb.czech.library.service.DataNotFoundException;
+import pl.seb.czech.library.service.exceptions.DataAlreadyFoundException;
+import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.service.TitleInfoService;
 import pl.seb.czech.library.visualTesting.DataPreparer;
 
@@ -22,12 +22,6 @@ public class TitleInfoServiceTestSuite {
     @Autowired
     DataPreparer dataPreparer;
 
-    @Autowired
-    TitleInfoService titleInfoService;
-
-    @Autowired
-    TitleInfoRepository titleInfoRepository;
-
     @BeforeEach
     public void populateData() {
         dataPreparer.prepareData();
@@ -38,6 +32,12 @@ public class TitleInfoServiceTestSuite {
         dataPreparer.cleanUp();
     }
 
+    @Autowired
+    TitleInfoService titleInfoService;
+
+    @Autowired
+    TitleInfoRepository titleInfoRepository;
+    
     @Test
     public void getNumOfAvailableBooksTest() {
         String title = "It";

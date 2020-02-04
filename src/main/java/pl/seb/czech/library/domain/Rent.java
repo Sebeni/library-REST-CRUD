@@ -15,6 +15,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
+@Table(name = "rents")
 public class Rent {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,8 +37,12 @@ public class Rent {
             updatable = false)
     private LocalDate rentDate = LocalDate.now();
 
+
     @Column(name = "due_date")
     private LocalDate dueDate = rentDate.plusWeeks(2);
+    
+    @Column(name = "due_date_prolonged")
+    private boolean isDueDateProlonged;
 
     @Override
     public boolean equals(Object o) {
@@ -57,5 +62,10 @@ public class Rent {
     public Rent(User user, Book book) {
         this.user = user;
         this.book = book;
+    }
+    
+    public void prolong(){
+        dueDate = dueDate.plusWeeks(2);
+        isDueDateProlonged = true;
     }
 }

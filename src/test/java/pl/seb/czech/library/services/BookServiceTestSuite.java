@@ -2,17 +2,17 @@ package pl.seb.czech.library.services;
 
 import org.junit.jupiter.api.AfterEach;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.seb.czech.library.domain.Book;
 import pl.seb.czech.library.domain.BookStatus;
+import pl.seb.czech.library.domain.User;
 import pl.seb.czech.library.repositories.BookRepository;
 import pl.seb.czech.library.repositories.TitleInfoRepository;
 import pl.seb.czech.library.service.BookService;
-import pl.seb.czech.library.service.DataNotFoundException;
+import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.visualTesting.DataPreparer;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,14 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class BookServiceTestSuite {
     @Autowired
-    DataPreparer dataPreparer;
-    @Autowired
     BookService bookService;
     @Autowired
     BookRepository bookRepository;
     @Autowired
     TitleInfoRepository titleInfoRepository;
-
+    @Autowired
+    DataPreparer dataPreparer;
 
     @BeforeEach
     public void populateData() {
@@ -62,7 +61,7 @@ public class BookServiceTestSuite {
                 () -> assertThrows(DataNotFoundException.class, () -> bookService.addNewBook(title, author, wrongPublicationYear))
         );
         
-        Book bookAfterChange = bookService.changeBookStatus(idBookToAdd, BookStatus.RENTED);
+        Book bookAfterChange = bookService.changeBookStatusById(idBookToAdd, BookStatus.RENTED);
         
         assertAll(
                 () ->   assertEquals(BookStatus.RENTED, bookService.findById(idBookToAdd).getBookStatus()),
@@ -70,9 +69,23 @@ public class BookServiceTestSuite {
                 () ->   assertThrows(IllegalArgumentException.class, () -> bookService.deleteById(idBookToAdd))
         );
         
-        bookService.changeBookStatus(idBookToAdd, BookStatus.AVAILABLE);
+        bookService.changeBookStatusById(idBookToAdd, BookStatus.AVAILABLE);
         bookService.deleteById(idBookToAdd);
         
         assertEquals(bookInputNumCount, titleInfoRepository.getNumOfAllBooks(title));
+    }
+    
+    @Test
+    public void findWhoAndForHowLongRentedTestSuite() {
+        User userWhoRented = DataPreparer.getUserList().get(0);
+        Book rentedBook = DataPreparer.getBookList().stream()
+                .filter(book -> book.getBookStatus().equals(BookStatus.RENTED))
+                .findAny().get();
+        Long bookId = rentedBook.getId();
+        
+        assertAll(
+                () -> assertEquals(userWhoRented, bookService.findWhoRented(bookId)),
+                () -> assertEquals(rentedBook.getRent().getDueDate(), bookService.findWhenReturned(bookId))
+        );
     }
 }

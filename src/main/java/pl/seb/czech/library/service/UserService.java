@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.seb.czech.library.domain.User;
 import pl.seb.czech.library.repositories.UserRepository;
+import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,15 +15,14 @@ import java.util.List;
 public class UserService {
     private UserRepository userRepository;
 
-    public void addUser(User user) {
-        userRepository.save(user);
+    public User saveUser(User user) {
+        return userRepository.save(user);
     }
     
-    
-    public void addUser(String firstName, String lastName, String ddMMyyyy) {
+    public User addUser(String firstName, String lastName, String ddMMyyyy) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
         LocalDate dob = LocalDate.parse(ddMMyyyy, formatter);
-        userRepository.save(new User(firstName, lastName, dob));
+        return userRepository.save(new User(firstName, lastName, dob));
     }
 
     public void deleteUser(Long id) {
@@ -40,5 +40,16 @@ public class UserService {
     public List<User> findAllUsers() {
         return userRepository.findAll();
     }
-
+    
+    public User addFine(User user, double howMuch) {
+        user.addToFine(howMuch);
+        return saveUser(user);
+    }
+    
+    public User payFine(User user, double howMuch) {
+        user.payFine(howMuch);
+        return saveUser(user);
+    }
+    
+    
 }

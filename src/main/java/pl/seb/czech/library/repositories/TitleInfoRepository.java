@@ -47,6 +47,7 @@ public interface TitleInfoRepository extends CrudRepository<TitleInfo, Long> {
     )
     long getNumOfAllBooks(@Param("TITLE") String title);
     
+    
 
     
 }
