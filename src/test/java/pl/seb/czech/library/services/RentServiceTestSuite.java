@@ -50,111 +50,145 @@ public class RentServiceTestSuite {
 
     @Test
     public void rentBookTest() {
-        long rentsNumBeforeRenting = rentService.getAllRentsCount();
+        
+        
+        User user = new User("First", "Name", LocalDate.now());
+        userService.saveUser(user);
         TitleInfo titleInfo = DataPreparer.getTitleInfoList().get(0);
-        List<Book> avbBooksList = titleInfo.getBookList().stream()
-                .filter(book -> book.getBookStatus().equals(BookStatus.AVAILABLE))
-                .collect(Collectors.toList());
-
-        List<Book> notAvbBookList = new ArrayList<>(titleInfo.getBookList());
-        notAvbBookList.removeAll(avbBooksList);
-
-        User userWithOneBook = DataPreparer.getUserList().get(0);
-        int numOfBooksRented = 4;
-
-
-        List<Rent> rents = new ArrayList<>();
-        for (int i = 0; i < numOfBooksRented; i++) {
-            rents.add(rentService.rentBook(userWithOneBook.getId(), avbBooksList.get(i).getId()));
+        List<Book> bookList = new ArrayList<>();
+        
+        int numOfNewBooks = 6;
+        for(int i = 0; i < numOfNewBooks; i++){
+            bookList.add(bookService.addNewBook(titleInfo));
         }
+        
+        long avbBooksBeforeRent = titleInfoService.getNumOfAvailableBooks(titleInfo.getTitle());
+        long allBooksBeforeRent = titleInfoService.getNumOfAllBooks(titleInfo.getTitle());
+        
+        List<Rent> rentList = new ArrayList<>();
+        
+        int numOfRentedBooks = 5;
+        for(int i = 0; i < numOfRentedBooks; i++){
+            rentList.add(rentService.rentBook(user.getId(), bookList.get(i).getId()));
+        }
+        
 
-        long rentsNumAfterRenting = rentService.getAllRentsCount();
-
-        long numOfAvbBooksAfterRent = titleInfoService.getNumOfAvailableBooks(titleInfo.getTitle());
-        long numOfNotAvbBooksAfterREnt = titleInfoService.getNumOfAllBooks(titleInfo.getTitle()) - numOfAvbBooksAfterRent;
-
+        long avbBooksAfterRent = titleInfoService.getNumOfAvailableBooks(titleInfo.getTitle());
+        
         assertAll(
-                () -> assertEquals(avbBooksList.size() - numOfBooksRented, numOfAvbBooksAfterRent),
-                () -> assertEquals(notAvbBookList.size() + numOfBooksRented, numOfNotAvbBooksAfterREnt),
-                () -> assertEquals(BookStatus.RENTED, bookService.findById(avbBooksList.get(0).getId()).getBookStatus()),
-                () -> assertThrows(RentException.class, () -> rentService.rentBook(userWithOneBook.getId(), avbBooksList.get(numOfBooksRented).getId())),
-                () -> assertThrows(RentException.class, () -> rentService.rentBook(userWithOneBook.getId(), notAvbBookList.get(0).getId())),
-                () -> assertEquals(numOfBooksRented + 1, rentService.countRentedBooksByUser(userWithOneBook.getId())),
-                () -> assertEquals(rents.get(0), bookService.findById(avbBooksList.get(0).getId()).getRent()),
-                () -> assertEquals(rentsNumBeforeRenting + numOfBooksRented, rentsNumAfterRenting)
+                () -> assertEquals(avbBooksBeforeRent - numOfRentedBooks, avbBooksAfterRent),
+                () -> assertEquals(allBooksBeforeRent, titleInfoService.getNumOfAllBooks(titleInfo.getTitle())),
+                () -> assertEquals(BookStatus.RENTED, bookService.findById(bookList.get(0).getId()).getBookStatus()),
+                () -> assertThrows(RentException.class, () -> rentService.rentBook(user.getId(), bookList.get(0).getId())),
+                () -> assertThrows(RentException.class, () -> rentService.rentBook(user.getId(), bookList.get(numOfRentedBooks).getId())),
+                () -> assertEquals(numOfRentedBooks, rentService.countRentedBooksByUser(user.getId())),
+                () -> assertEquals(rentList.get(0), bookService.findById(bookList.get(0).getId()).getRent())
         );
 
-        rents.forEach(rent -> rentService.deleteById(rent.getId()));
-
-        assertAll(
-                () -> assertEquals(rentsNumBeforeRenting, rentService.getAllRentsCount()),
-                () -> assertEquals(avbBooksList.size(), titleInfoService.getNumOfAvailableBooks(titleInfo.getTitle()))
-        );
+        try{
+            userService.deleteUser(user.getId());
+            bookList.forEach(book -> bookService.deleteById(book.getId()));
+            rentList.forEach(rent -> rentService.deleteById(rent.getId()));
+        } catch (Exception e) {
+            
+        }
+      
     }
     
     @Test
     public void returnBookAndCalculateFineTest() {
-        Book avbBook = DataPreparer.getBookList().stream().filter(book -> book.getBookStatus().equals(BookStatus.AVAILABLE)).findFirst().get();
+        User user = new User("First", "Name", LocalDate.now());
+        userService.saveUser(user);
+        TitleInfo titleInfo = DataPreparer.getTitleInfoList().get(0);
+        Book book = bookService.addNewBook(titleInfo);
+        Book book1 = bookService.addNewBook(titleInfo);
+        Rent rent = rentService.rentBook(user.getId(), book.getId());
         
-        long rentsNumBeforeRenting = rentService.getAllRentsCount();
-        Rent rent = DataPreparer.getRentList().get(0);
-       
+        
         long overdue = 100L;
         
         rent.setDueDate(LocalDate.now().minusDays(overdue));
         rent = rentRepository.save(rent);
-        long userId = rent.getUser().getId();
+    
 
         rentService.returnBook(rent.getId());
         
-        User user = userService.findUserById(userId);
+        double fine = overdue * Fines.PER_DAY_OVERDUE;
         
         assertAll(
-                () -> assertEquals(overdue * Fines.PER_DAY_OVERDUE, user.getFine()),
-                () -> assertEquals(rentsNumBeforeRenting - 1, rentService.getAllRentsCount()),
-                () -> assertThrows(RentException.class, () -> rentService.rentBook(user.getId(), avbBook.getId()))
+                () -> assertEquals(fine, userService.findUserById(user.getId()).getFine()),
+                () -> assertThrows(RentException.class, () -> rentService.rentBook(user.getId(), book1.getId()))
         );
+
+        user.payFine(fine);
+        try{
+            userService.deleteUser(user.getId());
+            bookService.deleteById(book.getId());
+            bookService.deleteById(book1.getId());
+        } catch (Exception e) {
+
+        }
+        
     }
     
     @Test
     public void reportDestroyedBookTest() {
-        long rentId = DataPreparer.getRentList().get(0).getId();
-        
-        Rent rent = rentService.findRentById(rentId);
-        long bookId = rent.getBook().getId();
-        long userId = rent.getUser().getId();
-        
-        assertAll(
-                () -> assertEquals(BookStatus.RENTED, bookService.findById(bookId).getBookStatus()),
-                () -> assertEquals(1, rentService.countRentedBooksByUser(userId)),
-                () -> assertEquals(0, userService.findUserById(userId).getFine())
-        );
-        
-        rentService.reportLostDestroyed(rentId);
+        User user = new User("First", "Name", LocalDate.now());
+        userService.saveUser(user);
+        TitleInfo titleInfo = DataPreparer.getTitleInfoList().get(0);
+        Book book = bookService.addNewBook(titleInfo);
+        Rent rent = rentService.rentBook(user.getId(), book.getId());
 
-        double fine = bookService.findById(bookId).getTitleInfo().getPrice() + Fines.LOST_OR_DESTROYED;
-        
         assertAll(
-                () -> assertEquals(BookStatus.LOST_OR_DESTROYED, bookService.findById(bookId).getBookStatus()),
-                () -> assertEquals(0, rentService.countRentedBooksByUser(userId)),
-                () -> assertEquals(fine, userService.findUserById(userId).getFine())
+                () -> assertEquals(BookStatus.RENTED, bookService.findById(book.getId()).getBookStatus()),
+                () -> assertEquals(1, rentService.countRentedBooksByUser(user.getId())),
+                () -> assertEquals(0, userService.findUserById(user.getId()).getFine())
         );
         
+        rentService.reportLostDestroyed(rent.getId());
+
+        double fine = bookService.findById(book.getId()).getTitleInfo().getPrice() + Fines.LOST_OR_DESTROYED;
+        
+        assertAll(
+                () -> assertEquals(BookStatus.LOST_OR_DESTROYED, bookService.findById(book.getId()).getBookStatus()),
+                () -> assertEquals(0, rentService.countRentedBooksByUser(user.getId())),
+                () -> assertEquals(fine, userService.findUserById(user.getId()).getFine())
+        );
+        
+        user.payFine(fine);
+        try{
+            userService.deleteUser(user.getId());
+            bookService.deleteById(book.getId());
+        } catch (Exception e) {
+
+        }
     }
     
     @Test
     public void prolongTest() {
-        long rentId = DataPreparer.getRentList().get(0).getId();
-        Rent rent = rentService.findRentById(rentId);
+        User user = new User("First", "Name", LocalDate.now());
+        userService.saveUser(user);
+        TitleInfo titleInfo = DataPreparer.getTitleInfoList().get(0);
+        Book book = bookService.addNewBook(titleInfo);
+        Rent rent = rentService.rentBook(user.getId(), book.getId());
+        
         LocalDate origDueDate = rent.getDueDate();
         
-        rent = rentService.prolong(rentId);
+        rent = rentService.prolong(rent.getId());
+        long rentId = rent.getId();
+        
         
         assertAll(
                 () -> assertEquals(origDueDate.plusWeeks(2), rentService.findRentById(rentId).getDueDate()),
                 () -> assertThrows(RentException.class, () -> rentService.prolong(rentId))
         );
-        
+
+        try{
+            userService.deleteUser(user.getId());
+            bookService.deleteById(book.getId());
+        } catch (Exception e) {
+            
+        }
         
     }
     

@@ -24,14 +24,17 @@ public class BookService {
         Optional<TitleInfo> titleInfo = titleInfoRepository.findByTitleAndAuthorAndPublicationYear(title, authorName, publicationYear);
         if (titleInfo.isPresent()) {
             TitleInfo current = titleInfo.get();
-
-            Book bookToAdd = new Book(current, BookStatus.AVAILABLE);
-            current.getBookList().add(bookToAdd);
-            current = titleInfoRepository.save(current);
-            return current.getBookList().get(current.getBookList().size() - 1);
+            return addNewBook(current);
         } else {
             throw new DataNotFoundException(String.format("No title was found with these parameters: author - %s, title - %s, publication year - %d", authorName, title, publicationYear));
         }
+    }
+
+    public Book addNewBook(TitleInfo titleInfo) {
+        Book bookToAdd = new Book(titleInfo, BookStatus.AVAILABLE);
+        titleInfo.getBookList().add(bookToAdd);
+        titleInfo = titleInfoRepository.save(titleInfo);
+        return titleInfo.getBookList().get(titleInfo.getBookList().size() - 1);
     }
 
     public Book changeBookStatusById(Long id, BookStatus changedStatus) throws DataNotFoundException {

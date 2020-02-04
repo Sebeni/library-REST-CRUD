@@ -36,7 +36,7 @@ public class DataPreparer {
         this.userRepository = userRepository;
     }
 
-    public void prepareData() {
+    public synchronized void prepareData() {
         if (!dbInit){
             initializeDB();
             dbInit = true;

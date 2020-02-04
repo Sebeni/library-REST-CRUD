@@ -76,13 +76,21 @@ public class UserServiceTestSuite {
     
     @Test
     public void addAndPayFine() {
-        long userId = DataPreparer.getUserList().get(0).getId();
+        String firstName = "Added";
+        String lastName = "User";
+        User user = new User(firstName, lastName, LocalDate.now());
+        userService.saveUser(user);
         
-        User user = userService.findUserById(userId);
+        user = userService.findUserById(user.getId());
         double accountBefore = user.getFine();
         user = userService.addFine(user, 10);
         assertEquals(accountBefore + 10, user.getFine());
         user = userService.payFine(user, 5);
         assertEquals(accountBefore + 5, user.getFine());
+        user = userService.payFine(user, 5);
+        assertEquals(accountBefore, user.getFine());
+
+        userService.deleteUser(user.getId());
+        
     }
 }

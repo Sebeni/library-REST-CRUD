@@ -22,7 +22,7 @@ public class UserService {
     public User addUser(String firstName, String lastName, String ddMMyyyy) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
         LocalDate dob = LocalDate.parse(ddMMyyyy, formatter);
-        return userRepository.save(new User(firstName, lastName, dob));
+        return saveUser(new User(firstName, lastName, dob));
     }
 
     public void deleteUser(Long id) {
