@@ -23,9 +23,6 @@ public class ForH2Debug implements ApplicationListener<ContextRefreshedEvent> {
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         dataPreparer.prepareData();
-        Long id = dataPreparer.getBookList().get(4).getId();
-        System.out.println(id);
-        bookService.deleteById(id);
 
     }
 

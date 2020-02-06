@@ -18,7 +18,7 @@ public class RentService {
     private RentRepository rentRepository;
 
     public Rent findRentById(Long id) {
-        return rentRepository.findById(id).orElseThrow(DataNotFoundException::new);
+        return rentRepository.findById(id).orElseThrow(() -> new DataNotFoundException("rent", id.toString()));
     }
 
     public Rent rentBook(Long userId, Long bookId) {

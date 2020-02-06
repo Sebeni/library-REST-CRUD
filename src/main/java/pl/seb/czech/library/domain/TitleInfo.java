@@ -39,7 +39,7 @@ public class TitleInfo {
             targetEntity = Book.class,
             mappedBy = "titleInfo",
             cascade = CascadeType.ALL,
-            fetch = FetchType.EAGER,
+            fetch = FetchType.LAZY,
             orphanRemoval = true
     )
     private Set<Book> bookList = new HashSet<>();

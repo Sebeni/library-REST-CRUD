@@ -38,40 +38,28 @@ public class TitleInfoServiceTestSuite {
 
     @Autowired
     BookService bookService;
-    
+
     @Test
     public void getNumOfAvailableBooksTest() {
         String title = "It";
-        
-        
         TitleInfo titleInfo = titleInfoService.findByAuthor("Stephen King").get(0);
-        
-        long countAvbWithFilter = findAllAvbBooksWithFilter(titleInfo);
 
-        assertAll(
-                () -> assertEquals(8, titleInfoService.getNumOfAvailableBooks(title)),
-                () -> assertEquals(countAvbWithFilter, titleInfoService.getNumOfAvailableBooks(title))
-        );
+        assertEquals(8, titleInfoService.getNumOfAvailableBooks(title));
 
-        
+
         Book book = bookService.addNewBook(titleInfo);
-        
-        assertAll(
-                () -> assertEquals(9, titleInfoService.getNumOfAvailableBooks(title)),
-                () -> assertEquals(9, findAllAvbBooksWithFilter(titleInfoService.findById(titleInfo.getId())))
-        );
-        
+
+
+        assertEquals(9, titleInfoService.getNumOfAvailableBooks(title));
+
         bookService.deleteById(book.getId());
 
-        assertAll(
-                () -> assertEquals(8, titleInfoService.getNumOfAvailableBooks(title)),
-                () -> assertEquals(8, findAllAvbBooksWithFilter(titleInfoService.findById(titleInfo.getId())))
-        );
-        
+        assertEquals(8, titleInfoService.getNumOfAvailableBooks(title));
+
 
     }
-    
-    private long findAllAvbBooksWithFilter(TitleInfo titleInfo){
+
+    private long findAllAvbBooksWithFilter(TitleInfo titleInfo) {
         return titleInfo.getBookList().stream()
                 .filter(book -> book.getBookStatus().equals(BookStatus.AVAILABLE))
                 .count();

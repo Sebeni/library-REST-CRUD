@@ -28,8 +28,7 @@ public class TitleInfoService {
     }
     
     public TitleInfo findByAuthorAndTitle(String authorName, String title) throws DataNotFoundException {
-        return titleInfoRepository.findByAuthorAndTitle(authorName.trim(), title.trim()).orElseThrow(() -> new DataNotFoundException(String.format(
-                "No title was found with these parameters: author's name %s, title %s", authorName, title)));
+        return titleInfoRepository.findByAuthorAndTitle(authorName.trim(), title.trim()).orElseThrow(() -> new DataNotFoundException("titleInfo", authorName, title));
     }
     
     public TitleInfo addTitleInfo(String title, String authorName, Integer publicationYear, double price) {
@@ -44,6 +43,6 @@ public class TitleInfoService {
         titleInfoRepository.deleteById(id);
     }
     
-    public TitleInfo findById(Long id) {return titleInfoRepository.findById(id).orElseThrow(() -> new DataNotFoundException("No title with this id" + id));}
+    public TitleInfo findById(Long id) {return titleInfoRepository.findById(id).orElseThrow(() -> new DataNotFoundException("titleInfo", id.toString()));}
     
 }

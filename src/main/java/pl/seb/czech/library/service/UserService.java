@@ -30,11 +30,11 @@ public class UserService {
     }
 
     public User findUserById(Long id) throws DataNotFoundException {
-        return userRepository.findById(id).orElseThrow(DataNotFoundException::new);
+        return userRepository.findById(id).orElseThrow(() -> new DataNotFoundException("user", id.toString()));
     }
 
     public User findUserByName(String firstName, String lastName) throws DataNotFoundException {
-        return userRepository.findByFirstNameAndLastName(firstName.trim(), lastName.trim()).orElseThrow(DataNotFoundException::new);
+        return userRepository.findByFirstNameAndLastName(firstName.trim(), lastName.trim()).orElseThrow(() -> new DataNotFoundException("user", firstName, lastName));
     }
     
     public List<User> findAllUsers() {
