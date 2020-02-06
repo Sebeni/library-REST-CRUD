@@ -27,7 +27,7 @@ public interface TitleInfoRepository extends CrudRepository<TitleInfo, Long> {
     Optional<TitleInfo> findByTitleAndAuthorAndPublicationYear(String title, String author, Integer publicationYear);
 
     @Query(
-            value = "SELECT COUNT(B.STATUS) FROM BOOKS B" +
+            value = "SELECT COUNT(*) FROM BOOKS B" +
                     " INNER JOIN TITLES_INFO T" +
                     " ON B.TITLE_INFO_ID = T.ID" +
                     " WHERE B.STATUS = 'AVAILABLE'" +

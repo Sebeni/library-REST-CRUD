@@ -32,9 +32,10 @@ public class BookService {
 
     public Book addNewBook(TitleInfo titleInfo) {
         Book bookToAdd = new Book(titleInfo, BookStatus.AVAILABLE);
-        titleInfo.getBookList().add(bookToAdd);
-        titleInfo = titleInfoRepository.save(titleInfo);
-        return titleInfo.getBookList().get(titleInfo.getBookList().size() - 1);
+//        titleInfo.getBookList().add(bookToAdd);
+//        titleInfoRepository.save(titleInfo);
+        return bookRepository.save(bookToAdd);
+        
     }
 
     public Book changeBookStatusById(Long id, BookStatus changedStatus) throws DataNotFoundException {

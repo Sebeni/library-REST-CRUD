@@ -1,14 +1,13 @@
 package pl.seb.czech.library.services;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import pl.seb.czech.library.domain.Book;
 import pl.seb.czech.library.domain.BookStatus;
 import pl.seb.czech.library.domain.TitleInfo;
 import pl.seb.czech.library.repositories.TitleInfoRepository;
+import pl.seb.czech.library.service.BookService;
 import pl.seb.czech.library.service.exceptions.DataAlreadyFoundException;
 import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.service.TitleInfoService;
@@ -16,6 +15,9 @@ import pl.seb.czech.library.visualTesting.DataPreparer;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 public class TitleInfoServiceTestSuite {
@@ -27,36 +29,59 @@ public class TitleInfoServiceTestSuite {
         dataPreparer.prepareData();
     }
 
-    @AfterEach
-    public void cleanUp() {
-        dataPreparer.cleanUp();
-    }
 
     @Autowired
     TitleInfoService titleInfoService;
 
     @Autowired
     TitleInfoRepository titleInfoRepository;
+
+    @Autowired
+    BookService bookService;
     
     @Test
     public void getNumOfAvailableBooksTest() {
         String title = "It";
+        
+        
+        TitleInfo titleInfo = titleInfoService.findByAuthor("Stephen King").get(0);
+        
+        long countAvbWithFilter = findAllAvbBooksWithFilter(titleInfo);
 
-        Long availableItBooksInputNum = DataPreparer.getTitleInfoList().stream()
-                .filter(titleInfo -> titleInfo.getTitle().equals(title))
-                .flatMap(titleInfo -> titleInfo.getBookList().stream())
+        assertAll(
+                () -> assertEquals(8, titleInfoService.getNumOfAvailableBooks(title)),
+                () -> assertEquals(countAvbWithFilter, titleInfoService.getNumOfAvailableBooks(title))
+        );
+
+        
+        Book book = bookService.addNewBook(titleInfo);
+        
+        assertAll(
+                () -> assertEquals(9, titleInfoService.getNumOfAvailableBooks(title)),
+                () -> assertEquals(9, findAllAvbBooksWithFilter(titleInfoService.findById(titleInfo.getId())))
+        );
+        
+        bookService.deleteById(book.getId());
+
+        assertAll(
+                () -> assertEquals(8, titleInfoService.getNumOfAvailableBooks(title)),
+                () -> assertEquals(8, findAllAvbBooksWithFilter(titleInfoService.findById(titleInfo.getId())))
+        );
+        
+
+    }
+    
+    private long findAllAvbBooksWithFilter(TitleInfo titleInfo){
+        return titleInfo.getBookList().stream()
                 .filter(book -> book.getBookStatus().equals(BookStatus.AVAILABLE))
                 .count();
-
-        long countAvbFromDb = titleInfoService.getNumOfAvailableBooks(title);
-        Assertions.assertEquals(availableItBooksInputNum, countAvbFromDb);
     }
 
     @Test
     public void findByAuthorTest() {
         String author = "Georg Orwell";
 
-        List<TitleInfo> booksWithAuthorInputNum = DataPreparer.getTitleInfoList().stream()
+        List<TitleInfo> booksWithAuthorInputNum = dataPreparer.getTitleInfoList().stream()
                 .filter(titleInfo -> titleInfo.getAuthor().equals(author))
                 .collect(Collectors.toList());
 
@@ -70,15 +95,15 @@ public class TitleInfoServiceTestSuite {
         String author = "Georg Orwell";
         String title = "Nineteen Eighty-Four";
 
-        TitleInfo titleInfoInput = DataPreparer.getTitleInfoList().stream()
+        TitleInfo titleInfoInput = dataPreparer.getTitleInfoList().stream()
                 .filter(titleInfo -> titleInfo.getAuthor().equals(author) && titleInfo.getTitle().equals(title))
                 .findAny().get();
 
         TitleInfo titleInfoDB = titleInfoService.findByAuthorAndTitle(author, title);
 
 
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(titleInfoInput, titleInfoDB),
+        assertAll(
+                () -> assertEquals(titleInfoInput, titleInfoDB),
                 () -> Assertions.assertThrows(DataNotFoundException.class, () -> titleInfoService.findByAuthorAndTitle(author + "s", title))
         );
     }
@@ -93,14 +118,14 @@ public class TitleInfoServiceTestSuite {
 
         TitleInfo addedTitleInfo = titleInfoService.addTitleInfo(title, author, addedPublicationYear, 10.99);
 
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(DataPreparer.getTitleInfoList().size() + 1, titleInfoRepository.count()),
+        assertAll(
+                () -> assertEquals(dataPreparer.getTitleInfoList().size() + 1, titleInfoRepository.count()),
                 () -> Assertions.assertThrows(DataAlreadyFoundException.class, () -> titleInfoService.addTitleInfo(title, author, oldPublicationYear, 10.99))
         );
 
         titleInfoService.deleteById(addedTitleInfo.getId());
-        
-        Assertions.assertEquals(DataPreparer.getTitleInfoList().size(), titleInfoRepository.count());
+
+        assertEquals(dataPreparer.getTitleInfoList().size(), titleInfoRepository.count());
     }
 
 }

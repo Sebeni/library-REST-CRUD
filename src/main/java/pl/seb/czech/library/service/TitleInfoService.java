@@ -44,4 +44,6 @@ public class TitleInfoService {
         titleInfoRepository.deleteById(id);
     }
     
+    public TitleInfo findById(Long id) {return titleInfoRepository.findById(id).orElseThrow(() -> new DataNotFoundException("No title with this id" + id));}
+    
 }

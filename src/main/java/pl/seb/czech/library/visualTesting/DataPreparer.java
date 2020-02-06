@@ -14,14 +14,14 @@ import java.util.List;
 
 @Component
 public class DataPreparer {
-    private static boolean dbInit = false;
+    private boolean dbInit = false;
   
     
     
-    private static List<User> userList = new ArrayList<>();
-    private static List<TitleInfo> titleInfoList = new ArrayList<>();
-    private static List<Book> bookList = new ArrayList<>();
-    private static List<Rent> rentList = new ArrayList<>();
+    private List<User> userList = new ArrayList<>();
+    private List<TitleInfo> titleInfoList = new ArrayList<>();
+    private List<Book> bookList = new ArrayList<>();
+    private List<Rent> rentList = new ArrayList<>();
 
     private BookRepository bookRepository;
     private RentRepository rentRepository;
@@ -44,14 +44,15 @@ public class DataPreparer {
     }
 
     private void initializeDB() {
+   
+        
         TitleInfo it = new TitleInfo("It", "Stephen King", 1986, 12.99);
         TitleInfo braveNW = new TitleInfo("Brave New World", "Aldous Huxley", 1932, 9.99);
         TitleInfo year1984 = new TitleInfo("Nineteen Eighty-Four", "Georg Orwell", 1949, 8.99);
         TitleInfo plague = new TitleInfo("Plague", "Albert Camus", 1947, 7.99);
         TitleInfo catch22 = new TitleInfo("Catch 22", "Joseph Heller", 1961, 11.99);
         TitleInfo cuckoo = new TitleInfo("One Flew Over the Cuckoo’s Nest", "Ken Kesey", 1962, 11.49);
-        TitleInfo farm = new TitleInfo("Animal Farm", "Georg Orwell", 1945, 12.99);
-        titleInfoList = Arrays.asList(it, braveNW, year1984, plague, catch22, cuckoo, farm);
+        titleInfoList = Arrays.asList(it, braveNW, year1984, plague, catch22, cuckoo);
         titleInfoRepository.saveAll(titleInfoList);
 
         int numOfBooksOfEachTitle = 10;
@@ -103,42 +104,22 @@ public class DataPreparer {
             bookRepository.save(book);
         }
     }
-
-    public void cleanUp() {
-        try {
-            bookRepository.deleteAll();
-            rentRepository.deleteAll();
-            titleInfoRepository.deleteAll();
-            userRepository.deleteAll();
-
-            bookList.clear();
-            rentList.clear();
-            titleInfoList.clear();
-            userList.clear();
-
-            dbInit = false;
-
-        } catch (Exception e) {
-
-        }
-
-
-    }
+    
     
 
-    public static List<User> getUserList() {
+    public List<User> getUserList() {
         return new ArrayList<>(userList);
     }
 
-    public static List<TitleInfo> getTitleInfoList() {
+    public List<TitleInfo> getTitleInfoList() {
         return new ArrayList<>(titleInfoList);
     }
 
-    public static List<Book> getBookList() {
+    public List<Book> getBookList() {
         return new ArrayList<>(bookList);
     }
 
-    public static List<Rent> getRentList() {
+    public  List<Rent> getRentList() {
         return new ArrayList<>(rentList);
     }
 }

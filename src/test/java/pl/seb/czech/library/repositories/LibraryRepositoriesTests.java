@@ -33,11 +33,7 @@ class LibraryRepositoriesTests {
     public void populateData() {
         dataPreparer.prepareData();
     }
-
-    @AfterEach
-    public void cleanUp() {
-        dataPreparer.cleanUp();
-    }
+    
 
     @Test
     void entitiesCountTest() {
@@ -49,17 +45,17 @@ class LibraryRepositoriesTests {
 
 //		then
         Assertions.assertAll(
-                () -> Assertions.assertEquals(DataPreparer.getBookList().size(), numOfBooks),
-                () -> Assertions.assertEquals(DataPreparer.getTitleInfoList().size(), numOfTitleInfos),
-                () -> Assertions.assertEquals(DataPreparer.getRentList().size(), numOfRents),
-                () -> Assertions.assertEquals(DataPreparer.getUserList().size(), numOfUsers)
+                () -> Assertions.assertEquals(dataPreparer.getBookList().size(), numOfBooks),
+                () -> Assertions.assertEquals(dataPreparer.getTitleInfoList().size(), numOfTitleInfos),
+                () -> Assertions.assertEquals(dataPreparer.getRentList().size(), numOfRents),
+                () -> Assertions.assertEquals(dataPreparer.getUserList().size(), numOfUsers)
 
         );
     }
 
     @Test
     void userNameEqualityTest() {
-        List<User> userListInput = DataPreparer.getUserList();
+        List<User> userListInput = dataPreparer.getUserList();
         List<User> userListFromDB = userRepository.findAll();
         
         Assertions.assertTrue(userListInput.containsAll(userListFromDB));
@@ -70,14 +66,14 @@ class LibraryRepositoriesTests {
     @Test
     void titleInfoEqualityTest() {
         List<TitleInfo> titleInfosDB = titleInfoRepository.findAll();
-        List<TitleInfo> titleInfosInput = DataPreparer.getTitleInfoList();
+        List<TitleInfo> titleInfosInput = dataPreparer.getTitleInfoList();
 
         Assertions.assertTrue(titleInfosInput.containsAll(titleInfosDB));
     }
 
     @Test
     void rentDateEqualityTest() {
-        List<Rent> rentsInput = DataPreparer.getRentList();
+        List<Rent> rentsInput = dataPreparer.getRentList();
         List<Rent> rentsDB = rentRepository.findAll();
         
         Assertions.assertAll(
@@ -103,8 +99,8 @@ class LibraryRepositoriesTests {
     
     @Test
     public void countRentsByUserId() {
-        long userId = DataPreparer.getUserList().get(0).getId();
-        long countRentedBooksWithUserId = DataPreparer.getRentList().stream()
+        long userId = dataPreparer.getUserList().get(0).getId();
+        long countRentedBooksWithUserId = dataPreparer.getRentList().stream()
                 .filter(rent -> rent.getUser().getId().equals(userId))
                 .count();
         

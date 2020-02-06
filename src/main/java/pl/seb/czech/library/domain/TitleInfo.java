@@ -7,9 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @NoArgsConstructor
@@ -44,7 +42,7 @@ public class TitleInfo {
             fetch = FetchType.EAGER,
             orphanRemoval = true
     )
-    private List<Book> bookList = new ArrayList<>();
+    private Set<Book> bookList = new HashSet<>();
     
     public TitleInfo(String title, String author, Integer publicationYear, Double price) {
         this.title = title;

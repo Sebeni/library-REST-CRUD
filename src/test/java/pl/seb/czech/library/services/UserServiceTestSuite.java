@@ -3,8 +3,10 @@ package pl.seb.czech.library.services;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import pl.seb.czech.library.domain.Fines;
 import pl.seb.czech.library.domain.User;
 import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.service.UserService;
@@ -27,14 +29,6 @@ public class UserServiceTestSuite {
         dataPreparer.prepareData();
     }
 
-    @AfterEach
-    public void cleanUp() {
-        dataPreparer.cleanUp();
-    }
-   
-
-  
-    
     @Test
     public void addFindDeleteUserTest() {
         String firstName = "Added";
@@ -44,14 +38,14 @@ public class UserServiceTestSuite {
         Long id = user.getId();
         
         assertAll(
-                () -> assertEquals(DataPreparer.getUserList().size() + 1, userService.findAllUsers().size()),
+                () -> assertEquals(dataPreparer.getUserList().size() + 1, userService.findAllUsers().size()),
                 () -> assertEquals(user, userService.findUserById(id)),
                 () -> assertEquals(user, userService.findUserByName(firstName, lastName)));
         
         userService.deleteUser(id);
         
         assertAll(
-                () -> assertEquals(DataPreparer.getUserList().size(), userService.findAllUsers().size()),
+                () -> assertEquals(dataPreparer.getUserList().size(), userService.findAllUsers().size()),
                 () -> assertThrows(DataNotFoundException.class, () -> userService.findUserById(id))
         );
     }
@@ -66,11 +60,11 @@ public class UserServiceTestSuite {
         User user = userService.findUserByName(firstName, lastName);
         Long id = user.getId();
 
-        assertEquals(DataPreparer.getUserList().size() + 1, userService.findAllUsers().size());
+        assertEquals(dataPreparer.getUserList().size() + 1, userService.findAllUsers().size());
         
         userService.deleteUser(id);
 
-        assertEquals(DataPreparer.getUserList().size(), userService.findAllUsers().size());
+        assertEquals(dataPreparer.getUserList().size(), userService.findAllUsers().size());
         
     }
     
