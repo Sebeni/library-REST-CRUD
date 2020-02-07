@@ -47,10 +47,6 @@ public class RentService {
         return rentRepository.countByUserId(userId);
     }
     
-    public long getAllRentsCount(){
-        return rentRepository.count();
-    }
-
     public void deleteById(Long rentId) {
         Rent rentToDelete = findRentById(rentId);
         bookService.changeBookStatusByBook(rentToDelete.getBook(), BookStatus.AVAILABLE);

@@ -22,7 +22,7 @@ public class BookService {
     private TitleInfoRepository titleInfoRepository;
     private TitleInfoService titleInfoService;
 
-    public Book addNewBook(String title, String authorName, Integer publicationYear) throws DataNotFoundException {
+    public Book addNewBook(String title, String authorName, Integer publicationYear) {
         Optional<TitleInfo> titleInfo = titleInfoRepository.findByTitleAndAuthorAndPublicationYear(title, authorName, publicationYear);
         if (titleInfo.isPresent()) {
             TitleInfo current = titleInfo.get();
@@ -41,14 +41,14 @@ public class BookService {
         return addNewBook(titleInfoService.findById(titleInfoId));
     }
 
-    Book changeBookStatusById(Long id, BookStatus changedStatus) throws DataNotFoundException {
+    public Book changeBookStatusById(Long id, BookStatus changedStatus) throws DataNotFoundException {
         Book book = findById(id);
         return changeBookStatusByBook(book, changedStatus);
     }
 
-    Book changeBookStatusByBook(Book book, BookStatus changedStatus) {
+    public Book changeBookStatusByBook(Book book, BookStatus changedStatus) {
         book.setBookStatus(changedStatus);
-        return bookRepository.save(book);
+        return saveBook(book);
     }
     
     public Book changeBookStatusByIdFromController(Long id, BookStatus changedStatus) {

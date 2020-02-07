@@ -1,12 +1,9 @@
 package pl.seb.czech.library.services;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import pl.seb.czech.library.domain.Fines;
 import pl.seb.czech.library.domain.User;
 import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.service.UserService;
@@ -40,7 +37,7 @@ public class UserServiceTestSuite {
         assertAll(
                 () -> assertEquals(dataPreparer.getUserList().size() + 1, userService.findAllUsers().size()),
                 () -> assertEquals(user, userService.findUserById(id)),
-                () -> assertEquals(user, userService.findUserByName(firstName, lastName)));
+                () -> assertEquals(user, userService.findUserByName(firstName, lastName).get(0)));
         
         userService.deleteUser(id);
         
@@ -51,13 +48,13 @@ public class UserServiceTestSuite {
     }
     
     @Test
-    public void addUserWithStrings() {
+    public void addUserWithStringsTest() {
         String firstName = "String";
         String lastName = "User";
         
-        userService.addUser(firstName, lastName, "11012020");
+        userService.addNewUser(firstName, lastName, "11012020");
         
-        User user = userService.findUserByName(firstName, lastName);
+        User user = userService.findUserByName(firstName, lastName).get(0);
         Long id = user.getId();
 
         assertEquals(dataPreparer.getUserList().size() + 1, userService.findAllUsers().size());
@@ -69,7 +66,7 @@ public class UserServiceTestSuite {
     }
     
     @Test
-    public void addAndPayFine() {
+    public void addAndPayFineTest() {
         String firstName = "Added";
         String lastName = "User";
         User user = new User(firstName, lastName, LocalDate.now());
@@ -86,5 +83,36 @@ public class UserServiceTestSuite {
 
         userService.deleteUser(user.getId());
         
+    }
+    
+    @Test
+    public void updateUserTest() {
+        User userToChange = userService.findUserById(dataPreparer.getUserList().get(0).getId());
+        Long id = userToChange.getId();
+        String oldName = userToChange.getFirstName();
+        String oldLastName = userToChange.getLastName();
+        LocalDate oldDoB = userToChange.getBirthDate();
+        
+        
+        String test = "TEST";
+        String newName = oldName + test;
+        String newLastName = oldLastName + test;
+        LocalDate newDoB = oldDoB.plusDays(1);
+        
+        userService.updateUserFirstName(id, newName);
+        userService.updateUserLastName(id, newLastName);
+        userService.updateUserBirthDate(id, newDoB);
+        
+        assertAll(
+                () -> assertEquals(newName, userService.findUserById(id).getFirstName()),
+                () -> assertEquals(newLastName, userService.findUserById(id).getLastName()),
+                () -> assertEquals(newDoB, userService.findUserById(id).getBirthDate())
+        );
+
+        userService.updateUserFirstName(id, oldName);
+        userService.updateUserLastName(id, oldLastName);
+        User userAfterChange = userService.updateUserBirthDate(id, oldDoB);
+        
+        assertEquals(userService.findUserById(id), userAfterChange);
     }
 }

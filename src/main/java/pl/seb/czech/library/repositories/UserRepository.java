@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import pl.seb.czech.library.domain.User;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,10 +13,12 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends CrudRepository<User, Long> {
     
-    Optional<User> findByFirstNameAndLastName(String firstName, String lastName);
+    List<User> findByFirstNameAndLastName(String firstName, String lastName);
     
     @Override
     List<User> findAll();
+    
+    Optional<User> findByFirstNameAndLastNameAndBirthDate(String firstName, String lastName, LocalDate birthDate);
     
     
 }

@@ -27,7 +27,7 @@ public class TitleInfoService {
         return titleInfoRepository.findByAuthor(authorsName.trim());
     }
     
-    public TitleInfo findByAuthorAndTitle(String authorName, String title) throws DataNotFoundException {
+    public TitleInfo findByAuthorAndTitle(String authorName, String title)  {
         return titleInfoRepository.findByAuthorAndTitle(authorName.trim(), title.trim()).orElseThrow(() -> new DataNotFoundException("titleInfo", authorName, title));
     }
     

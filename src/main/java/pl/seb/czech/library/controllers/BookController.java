@@ -50,4 +50,8 @@ public class BookController {
         return libraryMapper.mapToBookDto(bookService.changeBookStatusByIdFromController(bookId, bookStatus));
     }
     
+    @RequestMapping(method = RequestMethod.DELETE, value = "delete")
+    public void deleteBookByID(@RequestParam long bookId) {
+        bookService.deleteById(bookId);
+    }
 }

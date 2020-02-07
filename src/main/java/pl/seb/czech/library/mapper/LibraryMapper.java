@@ -11,6 +11,9 @@ import pl.seb.czech.library.domain.dto.RentDto;
 import pl.seb.czech.library.domain.dto.TitleInfoDto;
 import pl.seb.czech.library.domain.dto.UserDto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @Component
 public class LibraryMapper {
@@ -44,6 +47,12 @@ public class LibraryMapper {
     }
 
     public UserDto mapToUserDto(User user){
-        return new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getBirthDate());
+        return new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getBirthDate(), user.getFine());
+    }
+    
+    public List<UserDto> mapToUserDtoList(List<User> userList) {
+        return userList.stream()
+                .map(this::mapToUserDto)
+                .collect(Collectors.toList());
     }
 }
