@@ -7,6 +7,7 @@ import pl.seb.czech.library.repositories.RentRepository;
 import pl.seb.czech.library.repositories.TitleInfoRepository;
 import pl.seb.czech.library.repositories.UserRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,14 +45,14 @@ public class DataPreparer {
     }
 
     private void initializeDB() {
-   
+
         
-        TitleInfo it = new TitleInfo("It", "Stephen King", 1986, 12.99);
-        TitleInfo braveNW = new TitleInfo("Brave New World", "Aldous Huxley", 1932, 9.99);
-        TitleInfo year1984 = new TitleInfo("Nineteen Eighty-Four", "Georg Orwell", 1949, 8.99);
-        TitleInfo plague = new TitleInfo("Plague", "Albert Camus", 1947, 7.99);
-        TitleInfo catch22 = new TitleInfo("Catch 22", "Joseph Heller", 1961, 11.99);
-        TitleInfo cuckoo = new TitleInfo("One Flew Over the Cuckoo’s Nest", "Ken Kesey", 1962, 11.49);
+        TitleInfo it = new TitleInfo("It", "Stephen King", 1986, BigDecimal.valueOf(12.99));
+        TitleInfo braveNW = new TitleInfo("Brave New World", "Aldous Huxley", 1932, BigDecimal.valueOf(9.99));
+        TitleInfo year1984 = new TitleInfo("Nineteen Eighty-Four", "Georg Orwell", 1949, BigDecimal.valueOf(8.99));
+        TitleInfo plague = new TitleInfo("Plague", "Albert Camus", 1947, BigDecimal.valueOf(7.99));
+        TitleInfo catch22 = new TitleInfo("Catch 22", "Joseph Heller", 1961, BigDecimal.valueOf(11.99));
+        TitleInfo cuckoo = new TitleInfo("One Flew Over the Cuckoo’s Nest", "Ken Kesey", 1962, BigDecimal.valueOf(11.49));
         titleInfoList = Arrays.asList(it, braveNW, year1984, plague, catch22, cuckoo);
         titleInfoRepository.saveAll(titleInfoList);
 

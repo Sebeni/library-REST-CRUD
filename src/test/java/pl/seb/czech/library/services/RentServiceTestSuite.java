@@ -13,6 +13,8 @@ import pl.seb.czech.library.service.UserService;
 import pl.seb.czech.library.service.exceptions.RentException;
 import pl.seb.czech.library.visualTesting.DataPreparer;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +106,7 @@ public class RentServiceTestSuite {
 
         rentService.returnBook(rent.getId());
 
-        double fine = overdue * Fine.PER_DAY_OVERDUE;
+        BigDecimal fine = Fine.PER_DAY_OVERDUE.multiply(BigDecimal.valueOf(overdue));
 
         assertAll(
                 () -> assertEquals(fine, userService.findUserById(user.getId()).getFine()),
@@ -131,12 +133,12 @@ public class RentServiceTestSuite {
         assertAll(
                 () -> assertEquals(BookStatus.RENTED, bookService.findById(book.getId()).getBookStatus()),
                 () -> assertEquals(1, rentService.countRentedBooksByUser(user.getId())),
-                () -> assertEquals(0, userService.findUserById(user.getId()).getFine())
+                () -> assertEquals(BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP), userService.findUserById(user.getId()).getFine())
         );
 
         rentService.reportLostDestroyed(rent.getId());
 
-        double fine = bookService.findById(book.getId()).getTitleInfo().getPrice() + Fine.LOST_OR_DESTROYED;
+        BigDecimal fine = bookService.findById(book.getId()).getTitleInfo().getPrice().add(Fine.LOST_OR_DESTROYED);
 
         assertAll(
                 () -> assertEquals(BookStatus.LOST_OR_DESTROYED, bookService.findById(book.getId()).getBookStatus()),

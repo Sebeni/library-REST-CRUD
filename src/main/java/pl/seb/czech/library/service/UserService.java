@@ -10,17 +10,16 @@ import pl.seb.czech.library.service.exceptions.DataAlreadyFoundException;
 import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.service.exceptions.RentException;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Service
 public class UserService {
-    @Autowired
     private UserRepository userRepository;
-    @Autowired
     private RentService rentService;
 
     public User saveUser(User user) {
@@ -56,7 +55,7 @@ public class UserService {
     }
 
     public void deleteUser(Long userId) {
-        if(rentService.countRentedBooksByUser(userId) > 0){
+        if (rentService.countRentedBooksByUser(userId) > 0) {
             throw new RentException("Cant delete user because he still has rented books");
         } else {
             userRepository.deleteById(userId);
@@ -75,30 +74,22 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User addFine(Long userId, double howMuch) {
+    public User addFine(Long userId, BigDecimal howMuch) {
         return addFine(findUserById(userId), howMuch);
     }
 
-    public User addFine(User user, double howMuch) {
-        double fine = howMuch;
-        if (fine < 0) {
-            fine = fine * -1;
-        }
-        user.addToFine(fine);
+    public User addFine(User user, BigDecimal howMuch) {
+        user.addToFine(howMuch.abs());
         return saveUser(user);
     }
 
-    public User payFine(Long userId, double howMuch) {
+    public User payFine(Long userId, BigDecimal howMuch) {
         return payFine(findUserById(userId), howMuch);
     }
 
-    public User payFine(User user, double howMuch) {
-        double fine = howMuch;
-        if (fine < 0) {
-            fine = fine * -1;
-        }
-
-        if (user.getFine() < fine) {
+    public User payFine(User user, BigDecimal howMuch) {
+        BigDecimal fine = howMuch.abs();
+        if (user.getFine().compareTo(fine) < 0) {
             String warnMessage = String.format("You want to pay: %.2f but the fine is only %.2f", fine, user.getFine());
             throw new IllegalArgumentException(warnMessage);
         }
@@ -107,4 +98,13 @@ public class UserService {
     }
 
 
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setRentService(RentService rentService) {
+        this.rentService = rentService;
+    }
 }

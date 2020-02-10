@@ -1,16 +1,18 @@
 package pl.seb.czech.library.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.seb.czech.library.domain.*;
 import pl.seb.czech.library.repositories.RentRepository;
 import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.service.exceptions.RentException;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-@AllArgsConstructor
+
 @Service
 public class RentService {
     private UserService userService;
@@ -27,7 +29,7 @@ public class RentService {
         }
         User rentingUser = userService.findUserById(userId);
 
-        if (rentingUser.getFine() >= 1.00) {
+        if (BigDecimal.ONE.compareTo(rentingUser.getFine()) <= 0) {
             throw new RentException("Before renting a new book you must pay your fines");
         }
         Book rentedBook = bookService.findById(bookId);
@@ -61,9 +63,9 @@ public class RentService {
         deleteById(rentId);
     }
     
-    private double calculateFine(Rent rent) {
+    private BigDecimal calculateFine(Rent rent) {
         long daysOverdue = ChronoUnit.DAYS.between(rent.getDueDate(), LocalDate.now());
-        return  daysOverdue * Fine.PER_DAY_OVERDUE;
+        return Fine.PER_DAY_OVERDUE.multiply(BigDecimal.valueOf(daysOverdue));
     }
     
     public void reportLostDestroyed(Long rentId) {
@@ -71,7 +73,7 @@ public class RentService {
         User user = rent.getUser();
         Book lostOrDestroyed = rent.getBook();
         deleteById(rentId);
-        userService.addFine(user, lostOrDestroyed.getTitleInfo().getPrice() + Fine.LOST_OR_DESTROYED);
+        userService.addFine(user, lostOrDestroyed.getTitleInfo().getPrice().add(Fine.LOST_OR_DESTROYED));
         bookService.changeBookStatusByBook(lostOrDestroyed, BookStatus.LOST_OR_DESTROYED);
     }
     
@@ -84,5 +86,21 @@ public class RentService {
             throw new RentException("This book was already prolonged");
         }
         
+    }
+
+
+    @Autowired
+    private void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    @Autowired
+    private void setBookService(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    @Autowired
+    private void setRentRepository(RentRepository rentRepository) {
+        this.rentRepository = rentRepository;
     }
 }

@@ -11,9 +11,9 @@ public class DataNotFoundException extends RuntimeException {
         StringBuilder message = new StringBuilder();
         message.append("No ").append(whatWasLookingFor).append(" was found with ");
         if(parameters.length > 1) {
-            message.append(" these parameters: ");
+            message.append("these parameters: ");
         } else {
-            message.append(" this parameter: ");
+            message.append("this parameter: ");
         }
         
         for (String parameter : parameters) {

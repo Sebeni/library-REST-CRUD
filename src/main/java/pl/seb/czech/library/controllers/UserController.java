@@ -7,6 +7,7 @@ import pl.seb.czech.library.domain.dto.UserDto;
 import pl.seb.czech.library.mapper.LibraryMapper;
 import pl.seb.czech.library.service.UserService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -58,12 +59,12 @@ public class UserController {
     }
     
     @RequestMapping(method = RequestMethod.PUT, value = "addFine")
-    public UserDto addFine(@RequestParam Long userId, @RequestParam double howMuch) {
+    public UserDto addFine(@RequestParam Long userId, @RequestParam BigDecimal howMuch) {
         return libraryMapper.mapToUserDto(userService.addFine(userId, howMuch));
     }
     
     @RequestMapping(method = RequestMethod.PUT, value = "payFine")
-    public UserDto payFine(@RequestParam Long userId, @RequestParam double howMuch) {
+    public UserDto payFine(@RequestParam Long userId, @RequestParam BigDecimal howMuch) {
         return libraryMapper.mapToUserDto(userService.payFine(userId, howMuch));
     }
     

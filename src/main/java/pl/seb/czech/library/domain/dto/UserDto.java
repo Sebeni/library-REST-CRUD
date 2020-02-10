@@ -2,6 +2,8 @@ package pl.seb.czech.library.domain.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @AllArgsConstructor
@@ -11,5 +13,5 @@ public class UserDto {
     private String firstName;
     private String lastName;
     private LocalDate birthDate;
-    private double fine;
+    private BigDecimal fine;
 }

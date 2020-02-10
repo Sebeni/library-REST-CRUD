@@ -3,6 +3,8 @@ package pl.seb.czech.library.domain.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+
 @AllArgsConstructor
 @Getter
 public class TitleInfoDto {
@@ -10,5 +12,5 @@ public class TitleInfoDto {
     private String title;
     private String author;
     private Integer publicationYear;
-    private Double price;
+    private BigDecimal price;
 }

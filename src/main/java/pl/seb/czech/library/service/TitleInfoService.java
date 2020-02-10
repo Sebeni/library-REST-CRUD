@@ -1,6 +1,5 @@
 package pl.seb.czech.library.service;
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.seb.czech.library.domain.TitleInfo;
@@ -8,9 +7,10 @@ import pl.seb.czech.library.repositories.TitleInfoRepository;
 import pl.seb.czech.library.service.exceptions.DataAlreadyFoundException;
 import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 
+import java.math.BigDecimal;
 import java.util.List;
 
-@AllArgsConstructor
+
 @Service
 public class TitleInfoService {
     private TitleInfoRepository titleInfoRepository;
@@ -31,7 +31,7 @@ public class TitleInfoService {
         return titleInfoRepository.findByAuthorAndTitle(authorName.trim(), title.trim()).orElseThrow(() -> new DataNotFoundException("titleInfo", authorName, title));
     }
     
-    public TitleInfo addTitleInfo(String title, String authorName, Integer publicationYear, double price) {
+    public TitleInfo addTitleInfo(String title, String authorName, Integer publicationYear, BigDecimal price) {
         if(!titleInfoRepository.findByTitleAndAuthorAndPublicationYear(title, authorName, publicationYear).isPresent()){
             return titleInfoRepository.save(new TitleInfo(title, authorName, publicationYear, price));
         } else {
@@ -48,5 +48,10 @@ public class TitleInfoService {
     }
     
     public TitleInfo findById(Long id) {return titleInfoRepository.findById(id).orElseThrow(() -> new DataNotFoundException("titleInfo", id.toString()));}
-    
+
+
+    @Autowired
+    public void setTitleInfoRepository(TitleInfoRepository titleInfoRepository) {
+        this.titleInfoRepository = titleInfoRepository;
+    }
 }

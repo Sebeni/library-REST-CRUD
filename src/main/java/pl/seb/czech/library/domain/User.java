@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -44,7 +46,7 @@ public class User {
     
     
     @Column(name = "fine_to_pay")
-    private double fine;
+    private BigDecimal fine = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);
     
     public User(String firstName, String lastName, LocalDate birthDate) {
         this.firstName = firstName;
@@ -68,12 +70,12 @@ public class User {
     }
     
     
-    public void addToFine(double howMuch) {
-        fine += howMuch;
+    public void addToFine(BigDecimal howMuch) {
+        fine = fine.add(howMuch);
     }
     
-    public void payFine(double howMuch) {
-        fine -= howMuch;
+    public void payFine(BigDecimal howMuch) {
+        fine = fine.subtract(howMuch);
     }
     
 }

@@ -27,7 +27,7 @@ public class LibraryMapper {
     }
 
     public RentDto mapToRentDto(Rent rent) {
-        return new RentDto(rent.getId(), mapToBookDto(rent.getBook()), mapToUserDto(rent.getUser()));
+        return new RentDto(rent.getId(), mapToBookDto(rent.getBook()), mapToUserDto(rent.getUser()), rent.getRentDate(), rent.getDueDate(), rent.isDueDateProlonged());
     }
 
     public Rent mapToRent(RentDto rentDto) {

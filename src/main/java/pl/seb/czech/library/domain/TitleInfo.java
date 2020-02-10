@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Getter
@@ -28,8 +29,7 @@ public class TitleInfo {
     @NotNull
     private String author;
     
-    @NotNull
-    private Double price;
+    private BigDecimal price;
     
     @NotNull
     @Column(name = "publication_year")
@@ -44,11 +44,11 @@ public class TitleInfo {
     )
     private Set<Book> bookList = new HashSet<>();
     
-    public TitleInfo(String title, String author, Integer publicationYear, Double price) {
+    public TitleInfo(String title, String author, Integer publicationYear, BigDecimal price) {
         this.title = title;
         this.author = author;
         this.publicationYear = publicationYear;
-        this.price = price;
+        this.price = price.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     @Override

@@ -13,6 +13,7 @@ import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.service.TitleInfoService;
 import pl.seb.czech.library.visualTesting.DataPreparer;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,11 +105,11 @@ public class TitleInfoServiceTestSuite {
         Integer oldPublicationYear = 1949;
 
 
-        TitleInfo addedTitleInfo = titleInfoService.addTitleInfo(title, author, addedPublicationYear, 10.99);
+        TitleInfo addedTitleInfo = titleInfoService.addTitleInfo(title, author, addedPublicationYear, BigDecimal.valueOf(10.99));
 
         assertAll(
                 () -> assertEquals(dataPreparer.getTitleInfoList().size() + 1, titleInfoRepository.count()),
-                () -> Assertions.assertThrows(DataAlreadyFoundException.class, () -> titleInfoService.addTitleInfo(title, author, oldPublicationYear, 10.99))
+                () -> Assertions.assertThrows(DataAlreadyFoundException.class, () -> titleInfoService.addTitleInfo(title, author, oldPublicationYear, BigDecimal.valueOf(10.99)))
         );
 
         titleInfoService.deleteById(addedTitleInfo.getId());

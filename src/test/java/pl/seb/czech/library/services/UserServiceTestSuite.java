@@ -9,6 +9,7 @@ import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.service.UserService;
 import pl.seb.czech.library.visualTesting.DataPreparer;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -71,14 +72,16 @@ public class UserServiceTestSuite {
         String lastName = "User";
         User user = new User(firstName, lastName, LocalDate.now());
         userService.saveUser(user);
+
+        
         
         user = userService.findUserById(user.getId());
-        double accountBefore = user.getFine();
-        user = userService.addFine(user, 10);
-        assertEquals(accountBefore + 10, user.getFine());
-        user = userService.payFine(user, 5);
-        assertEquals(accountBefore + 5, user.getFine());
-        user = userService.payFine(user, 5);
+        BigDecimal accountBefore = user.getFine();
+        user = userService.addFine(user, BigDecimal.valueOf(10));
+        assertEquals(accountBefore.add(BigDecimal.valueOf(10)), user.getFine());
+        user = userService.payFine(user, BigDecimal.valueOf(5));
+        assertEquals(accountBefore.add(BigDecimal.valueOf(5)), user.getFine());
+        user = userService.payFine(user, BigDecimal.valueOf(5));
         assertEquals(accountBefore, user.getFine());
 
         userService.deleteUser(user.getId());

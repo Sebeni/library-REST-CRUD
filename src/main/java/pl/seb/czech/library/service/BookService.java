@@ -2,6 +2,7 @@ package pl.seb.czech.library.service;
 
 import lombok.AllArgsConstructor;
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.seb.czech.library.domain.Book;
 import pl.seb.czech.library.domain.BookStatus;
@@ -15,7 +16,6 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 
-@AllArgsConstructor
 @Service
 public class BookService {
     private BookRepository bookRepository;
@@ -99,4 +99,19 @@ public class BookService {
         return bookRepository.save(bookToSave);
     }
 
+
+    @Autowired
+    private void setBookRepository(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
+
+    @Autowired
+    private void setTitleInfoRepository(TitleInfoRepository titleInfoRepository) {
+        this.titleInfoRepository = titleInfoRepository;
+    }
+
+    @Autowired
+    private void setTitleInfoService(TitleInfoService titleInfoService) {
+        this.titleInfoService = titleInfoService;
+    }
 }

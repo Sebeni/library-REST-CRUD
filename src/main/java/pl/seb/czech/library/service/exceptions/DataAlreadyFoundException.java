@@ -14,9 +14,9 @@ public class DataAlreadyFoundException extends RuntimeException {
         StringBuilder message = new StringBuilder();
         message.append("The ").append(whatWasLookingFor).append(" with ");
         if(parameters.length > 1) {
-            message.append(" these parameters: ");
+            message.append("these parameters: ");
         } else {
-            message.append(" this parameter: ");
+            message.append("this parameter: ");
         }
 
         for (String parameter : parameters) {
