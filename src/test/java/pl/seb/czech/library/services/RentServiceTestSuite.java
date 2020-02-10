@@ -1,9 +1,7 @@
 package pl.seb.czech.library.services;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.seb.czech.library.domain.*;
@@ -18,7 +16,6 @@ import pl.seb.czech.library.visualTesting.DataPreparer;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -107,7 +104,7 @@ public class RentServiceTestSuite {
 
         rentService.returnBook(rent.getId());
 
-        double fine = overdue * Fines.PER_DAY_OVERDUE;
+        double fine = overdue * Fine.PER_DAY_OVERDUE;
 
         assertAll(
                 () -> assertEquals(fine, userService.findUserById(user.getId()).getFine()),
@@ -139,7 +136,7 @@ public class RentServiceTestSuite {
 
         rentService.reportLostDestroyed(rent.getId());
 
-        double fine = bookService.findById(book.getId()).getTitleInfo().getPrice() + Fines.LOST_OR_DESTROYED;
+        double fine = bookService.findById(book.getId()).getTitleInfo().getPrice() + Fine.LOST_OR_DESTROYED;
 
         assertAll(
                 () -> assertEquals(BookStatus.LOST_OR_DESTROYED, bookService.findById(book.getId()).getBookStatus()),

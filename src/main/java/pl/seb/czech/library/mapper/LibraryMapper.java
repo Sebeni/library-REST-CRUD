@@ -41,6 +41,12 @@ public class LibraryMapper {
     public TitleInfoDto mapToTitleInfoDto(TitleInfo titleInfo) {
         return new TitleInfoDto(titleInfo.getId(), titleInfo.getTitle(), titleInfo.getAuthor(), titleInfo.getPublicationYear(), titleInfo.getPrice());
     }
+    
+    public List<TitleInfoDto> mapToTitleInfoDtoList(List<TitleInfo> titleInfoList) {
+        return titleInfoList.stream()
+                .map(this::mapToTitleInfoDto)
+                .collect(Collectors.toList());
+    }
 
     public User mapToUser(UserDto userDto){
         return new User(userDto.getFirstName(), userDto.getLastName(), userDto.getBirthDate());

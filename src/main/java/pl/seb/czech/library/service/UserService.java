@@ -31,7 +31,7 @@ public class UserService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
         LocalDate dob = LocalDate.parse(ddMMyyyy, formatter);
         if (userRepository.findByFirstNameAndLastNameAndBirthDate(firstName, lastName, dob).isPresent()) {
-            throw new DataAlreadyFoundException("User already exist in database");
+            throw new DataAlreadyFoundException("user", firstName, lastName, ddMMyyyy);
         } else {
             return saveUser(new User(firstName, lastName, dob));
         }

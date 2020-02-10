@@ -1,15 +1,11 @@
 package pl.seb.czech.library.services;
 
-import org.junit.jupiter.api.AfterEach;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.seb.czech.library.domain.Book;
 import pl.seb.czech.library.domain.BookStatus;
-import pl.seb.czech.library.domain.Fines;
 import pl.seb.czech.library.domain.User;
 import pl.seb.czech.library.repositories.BookRepository;
 import pl.seb.czech.library.repositories.TitleInfoRepository;

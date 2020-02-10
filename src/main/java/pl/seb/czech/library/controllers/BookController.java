@@ -46,12 +46,12 @@ public class BookController {
     }
     
     @RequestMapping(method = RequestMethod.PUT, value = "changeStatus")
-    public BookDto changeBookStatus(@RequestParam long bookId, @RequestParam BookStatus bookStatus) {
+    public BookDto changeBookStatus(@RequestParam Long bookId, @RequestParam BookStatus bookStatus) {
         return libraryMapper.mapToBookDto(bookService.changeBookStatusByIdFromController(bookId, bookStatus));
     }
     
     @RequestMapping(method = RequestMethod.DELETE, value = "delete")
-    public void deleteBookByID(@RequestParam long bookId) {
+    public void deleteBookByID(@RequestParam Long bookId) {
         bookService.deleteById(bookId);
     }
 }

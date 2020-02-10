@@ -35,8 +35,12 @@ public class TitleInfoService {
         if(!titleInfoRepository.findByTitleAndAuthorAndPublicationYear(title, authorName, publicationYear).isPresent()){
             return titleInfoRepository.save(new TitleInfo(title, authorName, publicationYear, price));
         } else {
-            throw new DataAlreadyFoundException(String.format("The title is already in database"));
+            throw new DataAlreadyFoundException("titleInfo", title, authorName, publicationYear.toString(), String.valueOf(price));
         }
+    }
+    
+    public TitleInfo addTitleInfo(TitleInfo titleInfo) {
+        return addTitleInfo(titleInfo.getTitle(), titleInfo.getAuthor(), titleInfo.getPublicationYear(), titleInfo.getPrice());
     }
     
     public void deleteById(Long id) {

@@ -63,7 +63,7 @@ public class RentService {
     
     private double calculateFine(Rent rent) {
         long daysOverdue = ChronoUnit.DAYS.between(rent.getDueDate(), LocalDate.now());
-        return  daysOverdue * Fines.PER_DAY_OVERDUE;
+        return  daysOverdue * Fine.PER_DAY_OVERDUE;
     }
     
     public void reportLostDestroyed(Long rentId) {
@@ -71,7 +71,7 @@ public class RentService {
         User user = rent.getUser();
         Book lostOrDestroyed = rent.getBook();
         deleteById(rentId);
-        userService.addFine(user, lostOrDestroyed.getTitleInfo().getPrice() + Fines.LOST_OR_DESTROYED);
+        userService.addFine(user, lostOrDestroyed.getTitleInfo().getPrice() + Fine.LOST_OR_DESTROYED);
         bookService.changeBookStatusByBook(lostOrDestroyed, BookStatus.LOST_OR_DESTROYED);
     }
     
