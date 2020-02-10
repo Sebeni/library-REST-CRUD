@@ -1,5 +1,7 @@
 package pl.seb.czech.library.visualTesting;
 
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import pl.seb.czech.library.domain.*;
 import pl.seb.czech.library.repositories.BookRepository;
@@ -14,10 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class DataPreparer {
-    private boolean dbInit = false;
-  
-    
+public class DataPreparer implements ApplicationRunner {
     
     private List<User> userList = new ArrayList<>();
     private List<TitleInfo> titleInfoList = new ArrayList<>();
@@ -37,16 +36,14 @@ public class DataPreparer {
         this.userRepository = userRepository;
     }
 
-    public synchronized void prepareData() {
-        if (!dbInit){
+    public void run(ApplicationArguments args) {
+       
             initializeDB();
-            dbInit = true;
-        }
+        
     }
 
     private void initializeDB() {
-
-        
+       
         TitleInfo it = new TitleInfo("It", "Stephen King", 1986, BigDecimal.valueOf(12.99));
         TitleInfo braveNW = new TitleInfo("Brave New World", "Aldous Huxley", 1932, BigDecimal.valueOf(9.99));
         TitleInfo year1984 = new TitleInfo("Nineteen Eighty-Four", "Georg Orwell", 1949, BigDecimal.valueOf(8.99));
@@ -106,8 +103,6 @@ public class DataPreparer {
         }
     }
     
-    
-
     public List<User> getUserList() {
         return new ArrayList<>(userList);
     }

@@ -20,15 +20,11 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
 @SpringBootTest
 public class TitleInfoServiceTestSuite {
     @Autowired
     DataPreparer dataPreparer;
-
-    @BeforeEach
-    public void populateData() {
-        dataPreparer.prepareData();
-    }
 
 
     @Autowired

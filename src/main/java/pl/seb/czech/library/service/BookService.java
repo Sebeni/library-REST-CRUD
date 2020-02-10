@@ -10,6 +10,7 @@ import pl.seb.czech.library.domain.TitleInfo;
 import pl.seb.czech.library.domain.User;
 import pl.seb.czech.library.repositories.BookRepository;
 import pl.seb.czech.library.repositories.TitleInfoRepository;
+import pl.seb.czech.library.service.exceptions.BookException;
 import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 
 import java.time.LocalDate;
@@ -41,8 +42,8 @@ public class BookService {
         return addNewBook(titleInfoService.findById(titleInfoId));
     }
 
-    public Book changeBookStatusById(Long id, BookStatus changedStatus) throws DataNotFoundException {
-        Book book = findById(id);
+    public Book changeBookStatusById(Long bookId, BookStatus changedStatus) throws DataNotFoundException {
+        Book book = findById(bookId);
         return changeBookStatusByBook(book, changedStatus);
     }
 
@@ -51,30 +52,30 @@ public class BookService {
         return saveBook(book);
     }
     
-    public Book changeBookStatusByIdFromController(Long id, BookStatus changedStatus) {
-        Book book = findById(id);
+    public Book changeBookStatusByIdFromController(Long bookId, BookStatus changedStatus) {
+        Book book = findById(bookId);
         if(!book.getBookStatus().equals(BookStatus.RENTED) && !changedStatus.equals(BookStatus.RENTED)) {
-            return changeBookStatusById(id, changedStatus);
+            return changeBookStatusById(bookId, changedStatus);
         } else if (book.getBookStatus().equals(BookStatus.RENTED)) {
-            throw new IllegalArgumentException("Can't change rented status");
+            throw new BookException("Can't change rented status");
         } else if (changedStatus.equals(BookStatus.RENTED)) {
-            throw new IllegalArgumentException("Can't change to rented status");
+            throw new BookException("Can't change to rented status");
         } else {
-            throw new IllegalArgumentException(changedStatus + "does not exist");
+            throw new BookException(changedStatus + "does not exist");
         }
     }
 
-    public void deleteById(Long id) {
-        Book bookToDelete = findById(id);
-        if (bookToDelete.getBookStatus() != BookStatus.RENTED) {
-            bookRepository.deleteById(id);
+    public void deleteById(Long bookId) {
+        Book bookToDelete = findById(bookId);
+        if (!bookToDelete.getBookStatus().equals(BookStatus.RENTED)) {
+            bookRepository.deleteById(bookId);
         } else {
-            throw new IllegalArgumentException("Book is rented so it can't be deleted");
+            throw new BookException("Book is rented so it can't be deleted");
         }
     }
 
-    public Book findById(Long id) {
-        return bookRepository.findById(id).orElseThrow(() -> new DataNotFoundException("book", id.toString()));
+    public Book findById(Long bookId) {
+        return bookRepository.findById(bookId).orElseThrow(() -> new DataNotFoundException("book", bookId.toString()));
     }
 
     public User findWhoRented(Long bookId) {

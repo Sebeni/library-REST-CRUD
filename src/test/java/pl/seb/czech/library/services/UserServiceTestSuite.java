@@ -14,6 +14,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 @SpringBootTest
 public class UserServiceTestSuite {
     @Autowired
@@ -22,10 +23,6 @@ public class UserServiceTestSuite {
     @Autowired
     DataPreparer dataPreparer;
 
-    @BeforeEach
-    public void populateData() {
-        dataPreparer.prepareData();
-    }
 
     @Test
     public void addFindDeleteUserTest() {

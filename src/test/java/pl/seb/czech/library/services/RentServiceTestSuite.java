@@ -22,6 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+
 @SpringBootTest
 public class RentServiceTestSuite {
     @Autowired
@@ -38,10 +39,6 @@ public class RentServiceTestSuite {
     @Autowired
     DataPreparer dataPreparer;
 
-    @BeforeEach
-    public void populateData() {
-        dataPreparer.prepareData();
-    }
 
 
     @Test

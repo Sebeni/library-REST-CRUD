@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @SpringBootTest
 class LibraryRepositoriesTests {
     @Autowired
@@ -29,10 +30,7 @@ class LibraryRepositoriesTests {
     @Autowired
     UserRepository userRepository;
 
-    @BeforeEach
-    public void populateData() {
-        dataPreparer.prepareData();
-    }
+
     
 
     @Test
@@ -49,7 +47,6 @@ class LibraryRepositoriesTests {
                 () -> Assertions.assertEquals(dataPreparer.getTitleInfoList().size(), numOfTitleInfos),
                 () -> Assertions.assertEquals(dataPreparer.getRentList().size(), numOfRents),
                 () -> Assertions.assertEquals(dataPreparer.getUserList().size(), numOfUsers)
-
         );
     }
 

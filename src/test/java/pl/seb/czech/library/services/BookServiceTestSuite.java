@@ -10,10 +10,12 @@ import pl.seb.czech.library.domain.User;
 import pl.seb.czech.library.repositories.BookRepository;
 import pl.seb.czech.library.repositories.TitleInfoRepository;
 import pl.seb.czech.library.service.BookService;
+import pl.seb.czech.library.service.exceptions.BookException;
 import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.visualTesting.DataPreparer;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 
 @SpringBootTest
 public class BookServiceTestSuite {
@@ -25,11 +27,6 @@ public class BookServiceTestSuite {
     TitleInfoRepository titleInfoRepository;
     @Autowired
     DataPreparer dataPreparer;
-
-    @BeforeEach
-    public void populateData() {
-        dataPreparer.prepareData();
-    }
 
 
 
@@ -60,7 +57,7 @@ public class BookServiceTestSuite {
         assertAll(
                 () ->   assertEquals(BookStatus.RENTED, bookService.findById(idBookToAdd).getBookStatus()),
                 () ->   assertEquals(idBookToAdd, bookAfterChange.getId()),
-                () ->   assertThrows(IllegalArgumentException.class, () -> bookService.deleteById(idBookToAdd))
+                () ->   assertThrows(BookException.class, () -> bookService.deleteById(idBookToAdd))
         );
         
         bookService.changeBookStatusById(idBookToAdd, BookStatus.AVAILABLE);
