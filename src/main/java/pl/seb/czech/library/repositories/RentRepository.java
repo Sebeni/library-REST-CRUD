@@ -15,4 +15,6 @@ public interface RentRepository extends CrudRepository<Rent, Long> {
     
     Long countByUserId(Long userId);
     
+    
+    List<Rent> findByBookTitleInfoId(Long titleInfoId);
 }

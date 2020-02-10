@@ -49,14 +49,15 @@ public class Rent {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rent rent = (Rent) o;
-        return book.equals(rent.book) &&
+        return Objects.equals(id, rent.id) &&
+                book.equals(rent.book) &&
                 user.equals(rent.user) &&
                 rentDate.equals(rent.rentDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(book, user, rentDate);
+        return Objects.hash(id, book, user, rentDate);
     }
 
     public Rent(User user, Book book) {

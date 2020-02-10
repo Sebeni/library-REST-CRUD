@@ -1,10 +1,8 @@
 package pl.seb.czech.library.controllers;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
@@ -15,7 +13,6 @@ import pl.seb.czech.library.domain.Book;
 import pl.seb.czech.library.domain.BookStatus;
 import pl.seb.czech.library.domain.Rent;
 import pl.seb.czech.library.domain.TitleInfo;
-import pl.seb.czech.library.domain.dto.BookDto;
 import pl.seb.czech.library.visualTesting.DataPreparer;
 
 import java.time.LocalDate;
@@ -44,7 +41,7 @@ class BookControllerTest {
         TitleInfo titleInfo = dataPreparer.getTitleInfoList().get(0);
 
         mvc.perform(MockMvcRequestBuilders
-                .post(controllerPath + "addNewBook")
+                .post(controllerPath + BookController.addNewBookURL)
                 .queryParam("title", titleInfo.getTitle())
                 .queryParam("authorName", titleInfo.getAuthor())
                 .queryParam("publicationYear", titleInfo.getPublicationYear().toString()))
@@ -60,7 +57,7 @@ class BookControllerTest {
         TitleInfo titleInfo = dataPreparer.getTitleInfoList().get(0);
 
         mvc.perform(MockMvcRequestBuilders
-                .post(controllerPath + "addNewBook")
+                .post(controllerPath + BookController.addNewBookURL)
                 .queryParam("title", titleInfo.getTitle() + "test")
                 .queryParam("authorName", titleInfo.getAuthor())
                 .queryParam("publicationYear", titleInfo.getPublicationYear().toString()))
@@ -74,7 +71,7 @@ class BookControllerTest {
         TitleInfo titleInfo = dataPreparer.getTitleInfoList().get(0);
 
         mvc.perform(MockMvcRequestBuilders
-                .post(controllerPath + "addNewBook")
+                .post(controllerPath + BookController.addNewBookURL)
                 .queryParam("titleInfoId", titleInfo.getId().toString()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -88,7 +85,7 @@ class BookControllerTest {
     @Test
     void addNewBookWithTitleInfoIdNotFoundTest() throws Exception {
         mvc.perform(MockMvcRequestBuilders
-                .post(controllerPath + "addNewBook")
+                .post(controllerPath + BookController.addNewBookURL)
                 .queryParam("titleInfoId", String.valueOf(-1)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -100,7 +97,7 @@ class BookControllerTest {
         Long bookId = book.getId();
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + "getBook")
+                .get(controllerPath + BookController.getBookURL)
                 .queryParam("bookId", bookId.toString()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -111,7 +108,7 @@ class BookControllerTest {
     @Test
     void testGetBookIdNotFound() throws Exception {
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + "getBook")
+                .get(controllerPath + BookController.getBookURL)
                 .queryParam("bookId", String.valueOf(-1)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -146,7 +143,7 @@ class BookControllerTest {
         Rent rent = dataPreparer.getRentList().get(0);
 
         MvcResult result = mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + "whenReturned")
+                .get(controllerPath + BookController.whenReturnedURL)
                 .queryParam("bookId", rent.getBook().getId().toString()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -163,7 +160,7 @@ class BookControllerTest {
         Book bookNotRented = dataPreparer.getBookList().stream().filter(book1 -> !book1.getBookStatus().equals(BookStatus.RENTED)).findAny().get();
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + "whenReturned")
+                .get(controllerPath + BookController.whenReturnedURL)
                 .queryParam("bookId", bookNotRented.getId().toString()))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -175,14 +172,14 @@ class BookControllerTest {
         Book available = dataPreparer.getBookList().stream().filter(book1 -> book1.getBookStatus().equals(BookStatus.AVAILABLE)).findAny().get();
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + "changeStatus")
+                .put(controllerPath + BookController.changeStatusURL)
                 .queryParam("bookId", rented.getId().toString())
                 .queryParam("bookStatus", BookStatus.RENTED.toString()))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + "changeStatus")
+                .put(controllerPath + BookController.changeStatusURL)
                 .queryParam("bookId", available.getId().toString())
                 .queryParam("bookStatus", BookStatus.RENTED.toString()))
                 .andDo(print())
@@ -194,7 +191,7 @@ class BookControllerTest {
         Book available = dataPreparer.getBookList().stream().filter(book1 -> book1.getBookStatus().equals(BookStatus.AVAILABLE)).findAny().get();
        
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + "changeStatus")
+                .put(controllerPath + BookController.changeStatusURL)
                 .queryParam("bookId", available.getId().toString())
                 .queryParam("bookStatus", BookStatus.LOST_OR_DESTROYED.toString()))
                 .andDo(print())
@@ -203,7 +200,7 @@ class BookControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.bookStatus").value(BookStatus.LOST_OR_DESTROYED.toString()));
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + "changeStatus")
+                .put(controllerPath + BookController.changeStatusURL)
                 .queryParam("bookId", available.getId().toString())
                 .queryParam("bookStatus", BookStatus.AVAILABLE.toString()))
                 .andDo(print())
@@ -215,7 +212,7 @@ class BookControllerTest {
     @Test
     void changeBookStatusIdNotFound() throws Exception {
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + "changeStatus")
+                .put(controllerPath + BookController.changeStatusURL)
                 .queryParam("bookId", String.valueOf(-1))
                 .queryParam("bookStatus", BookStatus.AVAILABLE.toString()))
                 .andDo(print())
@@ -227,7 +224,7 @@ class BookControllerTest {
         Book available = dataPreparer.getBookList().stream().filter(book1 -> book1.getBookStatus().equals(BookStatus.AVAILABLE)).findAny().get();
         
         mvc.perform(MockMvcRequestBuilders
-                .delete(controllerPath + "delete")
+                .delete(controllerPath + BookController.deleteURL)
                 .queryParam("bookId", available.getId().toString()))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -238,7 +235,7 @@ class BookControllerTest {
         Book rented = dataPreparer.getBookList().stream().filter(book1 -> book1.getBookStatus().equals(BookStatus.RENTED)).findAny().get();
 
         mvc.perform(MockMvcRequestBuilders
-                .delete(controllerPath + "delete")
+                .delete(controllerPath + BookController.deleteURL)
                 .queryParam("bookId", rented.getId().toString()))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -247,7 +244,7 @@ class BookControllerTest {
     @Test
     void deleteBookIdNotFound() throws Exception {
         mvc.perform(MockMvcRequestBuilders
-                .delete(controllerPath + "delete")
+                .delete(controllerPath + BookController.deleteURL)
                 .queryParam("bookId", String.valueOf(-1)))
                 .andDo(print())
                 .andExpect(status().isNotFound());

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import pl.seb.czech.library.domain.Book;
 import pl.seb.czech.library.domain.Rent;
 import pl.seb.czech.library.domain.TitleInfo;
 import pl.seb.czech.library.domain.User;
@@ -15,6 +16,9 @@ import pl.seb.czech.library.visualTesting.DataPreparer;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 @SpringBootTest
@@ -42,11 +46,11 @@ class LibraryRepositoriesTests {
         long numOfUsers = rentRepository.count();
 
 //		then
-        Assertions.assertAll(
-                () -> Assertions.assertEquals(dataPreparer.getBookList().size(), numOfBooks),
-                () -> Assertions.assertEquals(dataPreparer.getTitleInfoList().size(), numOfTitleInfos),
-                () -> Assertions.assertEquals(dataPreparer.getRentList().size(), numOfRents),
-                () -> Assertions.assertEquals(dataPreparer.getUserList().size(), numOfUsers)
+        assertAll(
+                () -> assertEquals(dataPreparer.getBookList().size(), numOfBooks),
+                () -> assertEquals(dataPreparer.getTitleInfoList().size(), numOfTitleInfos),
+                () -> assertEquals(dataPreparer.getRentList().size(), numOfRents),
+                () -> assertEquals(dataPreparer.getUserList().size(), numOfUsers)
         );
     }
 
@@ -73,7 +77,7 @@ class LibraryRepositoriesTests {
         List<Rent> rentsInput = dataPreparer.getRentList();
         List<Rent> rentsDB = rentRepository.findAll();
         
-        Assertions.assertAll(
+        assertAll(
                 () -> Assertions.assertTrue(extractInitDate(rentsInput).containsAll(extractInitDate(rentsDB))),
                 () -> Assertions.assertTrue(extractUser(rentsInput).containsAll(extractUser(rentsDB))),
                 () -> Assertions.assertTrue(rentsInput.containsAll(rentsDB))
@@ -101,10 +105,24 @@ class LibraryRepositoriesTests {
                 .filter(rent -> rent.getUser().getId().equals(userId))
                 .count();
         
-        Assertions.assertEquals(countRentedBooksWithUserId, rentRepository.countByUserId(userId));
+        assertEquals(countRentedBooksWithUserId, rentRepository.countByUserId(userId));
     }
     
-    
+    @Test
+    public void shouldReturnListOfRentsFoundByTitleInfoId(){
+        long titleInfoId = dataPreparer.getTitleInfoList().get(0).getId();
+        
+        List<Rent> listOfRentsWithTitleInfo = dataPreparer.getRentList().stream()
+                .filter(rent -> rent.getBook().getTitleInfo().getId().equals(titleInfoId))
+                .collect(Collectors.toList());
+        
+        List<Rent> foundByRepository = rentRepository.findByBookTitleInfoId(titleInfoId);
+        
+        assertAll(
+                () ->  assertEquals(listOfRentsWithTitleInfo.size(), foundByRepository.size()),
+                () -> assertEquals(listOfRentsWithTitleInfo, foundByRepository)
+        );
+    }
 
 
 }
