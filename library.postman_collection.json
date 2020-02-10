@@ -1,0 +1,959 @@
+{
+	"info": {
+		"_postman_id": "dcc1f069-2066-4870-8ed5-bf3a13bba501",
+		"name": "library",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "book controller",
+			"item": [
+				{
+					"name": "add new book by provide arguments",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/book/addNewBook?title=It&authorName=Stephen King&publicationYear=1986",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"book",
+								"addNewBook"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "It"
+								},
+								{
+									"key": "authorName",
+									"value": "Stephen King"
+								},
+								{
+									"key": "publicationYear",
+									"value": "1986"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add book by title id",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/library/book/addNewBook?titleInfoId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"book",
+								"addNewBook"
+							],
+							"query": [
+								{
+									"key": "titleInfoId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add book by title id exception (id not existing)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/library/book/addNewBook?titleInfoId=100",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"book",
+								"addNewBook"
+							],
+							"query": [
+								{
+									"key": "titleInfoId",
+									"value": "100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add new book by provide arguments exception (year doesn't match)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/book/addNewBook?title=It&authorName=Stephen King&publicationYear=2005",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"book",
+								"addNewBook"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "It"
+								},
+								{
+									"key": "authorName",
+									"value": "Stephen King"
+								},
+								{
+									"key": "publicationYear",
+									"value": "2005"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find book by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/book/getBook?bookId=56",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"book",
+								"getBook"
+							],
+							"query": [
+								{
+									"key": "bookId",
+									"value": "56"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find when returned",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/book/whenReturned?bookId=7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"book",
+								"whenReturned"
+							],
+							"query": [
+								{
+									"key": "bookId",
+									"value": "7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find who rented",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/book/whoRented?bookId=7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"book",
+								"whoRented"
+							],
+							"query": [
+								{
+									"key": "bookId",
+									"value": "7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change book status",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/library/book/changeStatus?bookId=9&bookStatus=LOST_OR_DESTROYED",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"book",
+								"changeStatus"
+							],
+							"query": [
+								{
+									"key": "bookId",
+									"value": "9"
+								},
+								{
+									"key": "bookStatus",
+									"value": "LOST_OR_DESTROYED"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete book by id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/book/delete?bookId=8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"book",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "bookId",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "user controller",
+			"item": [
+				{
+					"name": "all users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/user/getAllUsers",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"user",
+								"getAllUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find user by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/user/findUserById?userId=69",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"user",
+								"findUserById"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "69"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find by name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/user/findUserByName?firstName=Atilla&lastName=Hun",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"user",
+								"findUserByName"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "Atilla"
+								},
+								{
+									"key": "lastName",
+									"value": "Hun"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add fine",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/user/addFine?userId=69&howMuch=-5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"user",
+								"addFine"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "69"
+								},
+								{
+									"key": "howMuch",
+									"value": "-5"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pay  fine",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/user/payFine?userId=69&howMuch=-3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"user",
+								"payFine"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "69"
+								},
+								{
+									"key": "howMuch",
+									"value": "-3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add new user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/user/addUser?firstName=test&lastName=testLast&ddMMyyyy=01011920",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"user",
+								"addUser"
+							],
+							"query": [
+								{
+									"key": "firstName",
+									"value": "test"
+								},
+								{
+									"key": "lastName",
+									"value": "testLast"
+								},
+								{
+									"key": "ddMMyyyy",
+									"value": "01011920"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/user/deleteUser?userId=67",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"user",
+								"deleteUser"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "67"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update firstName",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/user/changeFirstName?userId=69&changedFirstName=Joeey",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"user",
+								"changeFirstName"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "69"
+								},
+								{
+									"key": "changedFirstName",
+									"value": "Joeey"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "titleinfo controller",
+			"item": [
+				{
+					"name": "get avb books num",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/title/getAvb?title=It",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"title",
+								"getAvb"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "It"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all books num",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/title/getAll?title=It",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"title",
+								"getAll"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "It"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find titleInfos by author",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/title/byAuthor?authorName=Georg Orwell",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"title",
+								"byAuthor"
+							],
+							"query": [
+								{
+									"key": "authorName",
+									"value": "Georg Orwell"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find titleInfo by author and title",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/title/byAuthorTitle?authorName=Georg Orwell&title=Nineteen Eighty-Four",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"title",
+								"byAuthorTitle"
+							],
+							"query": [
+								{
+									"key": "authorName",
+									"value": "Georg Orwell"
+								},
+								{
+									"key": "title",
+									"value": "Nineteen Eighty-Four"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add new titleInfo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\": \"Animal Farm\",\n\t\"author\": \"Georg Orwell\",\n\t\"publicationYear\": 1945,\n\t\"price\": 10.99,\n\t\"titleInfoId\" : null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/library/title/addTitleInfo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"title",
+								"addTitleInfo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete titleInfo",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/title/delete?titleInfoId=80",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"title",
+								"delete"
+							],
+							"query": [
+								{
+									"key": "titleInfoId",
+									"value": "80"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find titleinfo by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/title/byId?titleInfoId=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"title",
+								"byId"
+							],
+							"query": [
+								{
+									"key": "titleInfoId",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "rent controller",
+			"item": [
+				{
+					"name": "find Rent By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/rent/findById?rentId=73",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"rent",
+								"findById"
+							],
+							"query": [
+								{
+									"key": "rentId",
+									"value": "73"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "rent Book",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/rent/rentBook?userId=67&bookId=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"rent",
+								"rentBook"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "67"
+								},
+								{
+									"key": "bookId",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "count books rented by user",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/rent/countUserBooks?userId=67",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"rent",
+								"countUserBooks"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "67"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "return book",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/rent/returnBook?rentId=73",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"rent",
+								"returnBook"
+							],
+							"query": [
+								{
+									"key": "rentId",
+									"value": "73"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "report lost or destroyed",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/rent/reportLost?rentId=75",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"rent",
+								"reportLost"
+							],
+							"query": [
+								{
+									"key": "rentId",
+									"value": "75"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "prolong rent",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/library/rent/prolong?rentId=79",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"library",
+								"rent",
+								"prolong"
+							],
+							"query": [
+								{
+									"key": "rentId",
+									"value": "79"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
