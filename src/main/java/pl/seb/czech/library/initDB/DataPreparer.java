@@ -1,4 +1,4 @@
-package pl.seb.czech.library.visualTesting;
+package pl.seb.czech.library.initDB;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

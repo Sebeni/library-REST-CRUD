@@ -1,6 +1,5 @@
 package pl.seb.czech.library.services;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +11,7 @@ import pl.seb.czech.library.repositories.TitleInfoRepository;
 import pl.seb.czech.library.service.BookService;
 import pl.seb.czech.library.service.exceptions.BookException;
 import pl.seb.czech.library.service.exceptions.DataNotFoundException;
-import pl.seb.czech.library.visualTesting.DataPreparer;
+import pl.seb.czech.library.initDB.DataPreparer;
 
 import static org.junit.jupiter.api.Assertions.*;
 

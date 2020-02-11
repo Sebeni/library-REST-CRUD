@@ -1,17 +1,14 @@
 package pl.seb.czech.library.repositories;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import pl.seb.czech.library.domain.Book;
 import pl.seb.czech.library.domain.Rent;
 import pl.seb.czech.library.domain.TitleInfo;
 import pl.seb.czech.library.domain.User;
-import pl.seb.czech.library.visualTesting.DataPreparer;
+import pl.seb.czech.library.initDB.DataPreparer;
 
 import java.time.LocalDate;
 import java.util.List;

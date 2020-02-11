@@ -8,8 +8,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -42,8 +44,13 @@ public class User {
             name = "created_on",
             updatable = false
     )
-    private LocalDateTime createdOn = LocalDateTime.now();
+    private Long createdOn = System.currentTimeMillis();
     
+    @Column(
+            name = "created_on_date",
+            updatable = false
+    )
+    private LocalDateTime timeStamp =  LocalDateTime.ofInstant(Instant.ofEpochMilli(createdOn), ZoneId.systemDefault());
     
     @Column(name = "fine_to_pay")
     private BigDecimal fine = BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP);

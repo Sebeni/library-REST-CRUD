@@ -14,4 +14,5 @@ public class UserDto {
     private String lastName;
     private LocalDate birthDate;
     private BigDecimal fine;
+    private Long createdOn;
 }

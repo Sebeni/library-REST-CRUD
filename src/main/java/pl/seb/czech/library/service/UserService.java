@@ -48,9 +48,11 @@ public class UserService {
         return saveUser(userToChange);
     }
 
-    public User updateUserBirthDate(Long id, LocalDate changedDob) {
+    public User updateUserBirthDate(Long id, String ddMMyyyy) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("ddMMyyyy");
+        LocalDate dob = LocalDate.parse(ddMMyyyy, formatter);
         User userToChange = findUserById(id);
-        userToChange.setBirthDate(changedDob);
+        userToChange.setBirthDate(dob);
         return saveUser(userToChange);
     }
 

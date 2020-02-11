@@ -1,6 +1,5 @@
 package pl.seb.czech.library.services;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +10,7 @@ import pl.seb.czech.library.service.RentService;
 import pl.seb.czech.library.service.TitleInfoService;
 import pl.seb.czech.library.service.UserService;
 import pl.seb.czech.library.service.exceptions.RentException;
-import pl.seb.czech.library.visualTesting.DataPreparer;
+import pl.seb.czech.library.initDB.DataPreparer;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

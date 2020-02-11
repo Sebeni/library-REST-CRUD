@@ -13,7 +13,7 @@ import pl.seb.czech.library.domain.Book;
 import pl.seb.czech.library.domain.BookStatus;
 import pl.seb.czech.library.domain.Rent;
 import pl.seb.czech.library.domain.TitleInfo;
-import pl.seb.czech.library.visualTesting.DataPreparer;
+import pl.seb.czech.library.initDB.DataPreparer;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

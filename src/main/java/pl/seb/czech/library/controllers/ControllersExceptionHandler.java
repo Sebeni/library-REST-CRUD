@@ -38,6 +38,10 @@ public class ControllersExceptionHandler {
     public void handleBookException(BookException e) {
         log.error(e.getMessage(), e);
     }
-    
-    
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public void handleIllegalArgumentException(IllegalArgumentException e) {
+        log.error(e.getMessage(), e);
+    }
 }

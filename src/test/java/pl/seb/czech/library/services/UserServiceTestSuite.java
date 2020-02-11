@@ -1,16 +1,16 @@
 package pl.seb.czech.library.services;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import pl.seb.czech.library.domain.User;
 import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.service.UserService;
-import pl.seb.czech.library.visualTesting.DataPreparer;
+import pl.seb.czech.library.initDB.DataPreparer;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -101,7 +101,7 @@ public class UserServiceTestSuite {
         
         userService.updateUserFirstName(id, newName);
         userService.updateUserLastName(id, newLastName);
-        userService.updateUserBirthDate(id, newDoB);
+        userService.updateUserBirthDate(id, newDoB.format(DateTimeFormatter.ofPattern("ddMMyyyy")));
         
         assertAll(
                 () -> assertEquals(newName, userService.findUserById(id).getFirstName()),
@@ -111,7 +111,7 @@ public class UserServiceTestSuite {
 
         userService.updateUserFirstName(id, oldName);
         userService.updateUserLastName(id, oldLastName);
-        User userAfterChange = userService.updateUserBirthDate(id, oldDoB);
+        User userAfterChange = userService.updateUserBirthDate(id, oldDoB.format(DateTimeFormatter.ofPattern("ddMMyyyy")));
         
         assertEquals(userService.findUserById(id), userAfterChange);
     }

@@ -11,7 +11,7 @@ import pl.seb.czech.library.service.BookService;
 import pl.seb.czech.library.service.exceptions.DataAlreadyFoundException;
 import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.service.TitleInfoService;
-import pl.seb.czech.library.visualTesting.DataPreparer;
+import pl.seb.czech.library.initDB.DataPreparer;
 
 import java.math.BigDecimal;
 import java.util.List;

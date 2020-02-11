@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.seb.czech.library.domain.BookStatus;
 import pl.seb.czech.library.domain.TitleInfo;
 import pl.seb.czech.library.domain.dto.TitleInfoDto;
-import pl.seb.czech.library.visualTesting.DataPreparer;
+import pl.seb.czech.library.initDB.DataPreparer;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

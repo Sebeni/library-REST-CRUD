@@ -53,7 +53,7 @@ public class LibraryMapper {
     }
 
     public UserDto mapToUserDto(User user){
-        return new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getBirthDate(), user.getFine());
+        return new UserDto(user.getId(), user.getFirstName(), user.getLastName(), user.getBirthDate(), user.getFine(), user.getCreatedOn());
     }
     
     public List<UserDto> mapToUserDtoList(List<User> userList) {
