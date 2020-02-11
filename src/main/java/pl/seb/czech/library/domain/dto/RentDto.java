@@ -15,5 +15,5 @@ public class RentDto {
     private UserDto userDto;
     private LocalDate rentDate;
     private LocalDate dueDate;
-    private boolean isDueDateProlonged;
+    private boolean dueDateProlonged;
 }

@@ -42,7 +42,7 @@ public class Rent {
     private LocalDate dueDate = rentDate.plusWeeks(2);
     
     @Column(name = "due_date_prolonged")
-    private boolean isDueDateProlonged;
+    private boolean dueDateProlonged;
 
     @Override
     public boolean equals(Object o) {
@@ -67,6 +67,6 @@ public class Rent {
     
     public void prolong(){
         dueDate = dueDate.plusWeeks(2);
-        isDueDateProlonged = true;
+        dueDateProlonged = true;
     }
 }
