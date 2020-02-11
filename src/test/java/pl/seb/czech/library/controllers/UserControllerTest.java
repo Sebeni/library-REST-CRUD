@@ -42,7 +42,7 @@ class UserControllerTest {
         LocalDate dob = LocalDate.parse(ddMMyyyy, formatter);
 
         MvcResult result = mvc.perform(MockMvcRequestBuilders
-                .post(controllerPath + UserController.addUserURL)
+                .post(controllerPath + UserController.ADD_USER_URL)
                 .queryParam("firstName", name)
                 .queryParam("lastName", lastName)
                 .queryParam("ddMMyyyy", ddMMyyyy))
@@ -56,7 +56,7 @@ class UserControllerTest {
         String createdUserId = JsonPath.read(result.getResponse().getContentAsString(), "$.userId").toString();
 
         mvc.perform(MockMvcRequestBuilders
-                .post(controllerPath + UserController.addUserURL)
+                .post(controllerPath + UserController.ADD_USER_URL)
                 .queryParam("firstName", name)
                 .queryParam("lastName", lastName)
                 .queryParam("ddMMyyyy", ddMMyyyy))
@@ -64,7 +64,7 @@ class UserControllerTest {
                 .andExpect(status().isBadRequest());
 
         mvc.perform(MockMvcRequestBuilders
-                .delete(controllerPath + UserController.deleteUserURL)
+                .delete(controllerPath + UserController.DELETE_USER_URL)
                 .queryParam("userId", createdUserId))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -75,7 +75,7 @@ class UserControllerTest {
         User user = dataPreparer.getRentList().get(0).getUser();
 
         mvc.perform(MockMvcRequestBuilders
-                .delete(controllerPath + UserController.deleteUserURL)
+                .delete(controllerPath + UserController.DELETE_USER_URL)
                 .queryParam("userId", user.getId().toString()))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -88,7 +88,7 @@ class UserControllerTest {
         String changedName = "TESTname";
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + UserController.changeFirstNameURL)
+                .put(controllerPath + UserController.CHANGE_FIRST_NAME_URL)
                 .queryParam("userId", user.getId().toString())
                 .queryParam("changedFirstName", changedName))
                 .andDo(print())
@@ -96,7 +96,7 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName").value(changedName));
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + UserController.changeFirstNameURL)
+                .put(controllerPath + UserController.CHANGE_FIRST_NAME_URL)
                 .queryParam("userId", user.getId().toString())
                 .queryParam("changedFirstName", nameBeforeChange))
                 .andDo(print())
@@ -112,7 +112,7 @@ class UserControllerTest {
         String changedLastName = "TESTname";
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + UserController.changeLastNameURL)
+                .put(controllerPath + UserController.CHANGE_LAST_NAME_URL)
                 .queryParam("userId", user.getId().toString())
                 .queryParam("changedLastName", changedLastName))
                 .andDo(print())
@@ -120,7 +120,7 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.lastName").value(changedLastName));
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + UserController.changeLastNameURL)
+                .put(controllerPath + UserController.CHANGE_LAST_NAME_URL)
                 .queryParam("userId", user.getId().toString())
                 .queryParam("changedLastName", lastNameBeforeChange))
                 .andDo(print())
@@ -137,7 +137,7 @@ class UserControllerTest {
         String changedDob = changedDobDate.format(DateTimeFormatter.ofPattern("ddMMyyyy"));
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + UserController.changeBirthDateURL)
+                .put(controllerPath + UserController.CHANGE_BIRTH_DATE_URL)
                 .queryParam("userId", user.getId().toString())
                 .queryParam("ddMMyyyy", changedDob))
                 .andDo(print())
@@ -145,7 +145,7 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.birthDate").value(changedDobDate.toString()));
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + UserController.changeBirthDateURL)
+                .put(controllerPath + UserController.CHANGE_BIRTH_DATE_URL)
                 .queryParam("userId", user.getId().toString())
                 .queryParam("ddMMyyyy", dobBeforeChange))
                 .andDo(print())
@@ -161,21 +161,21 @@ class UserControllerTest {
         String changedDob = changedDobDate.format(DateTimeFormatter.ofPattern("ddMMyyyy"));
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + UserController.changeFirstNameURL)
+                .put(controllerPath + UserController.CHANGE_FIRST_NAME_URL)
                 .queryParam("userId", String.valueOf(-1))
                 .queryParam("changedFirstName", changedName))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + UserController.changeLastNameURL)
+                .put(controllerPath + UserController.CHANGE_LAST_NAME_URL)
                 .queryParam("userId", String.valueOf(-1))
                 .queryParam("changedLastName", changedLastName))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + UserController.changeBirthDateURL)
+                .put(controllerPath + UserController.CHANGE_BIRTH_DATE_URL)
                 .queryParam("userId", String.valueOf(-1))
                 .queryParam("ddMMyyyy", changedDob))
                 .andDo(print())
@@ -188,7 +188,7 @@ class UserControllerTest {
         User user = dataPreparer.getUserList().get(0);
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + UserController.findUserByIdURL)
+                .get(controllerPath + UserController.FIND_USER_BY_ID_URL)
                 .queryParam("userId", user.getId().toString()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -202,7 +202,7 @@ class UserControllerTest {
     @Test
     void findUserByIdNotFound() throws Exception {
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + UserController.findUserByIdURL)
+                .get(controllerPath + UserController.FIND_USER_BY_ID_URL)
                 .queryParam("userId", String.valueOf(-1)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -213,7 +213,7 @@ class UserControllerTest {
         User user = dataPreparer.getUserList().get(0);
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + UserController.findUserByNameURL)
+                .get(controllerPath + UserController.FIND_USER_BY_NAME_URL)
                 .queryParam("firstName", user.getFirstName())
                 .queryParam("lastName", user.getLastName()))
                 .andDo(print())
@@ -228,7 +228,7 @@ class UserControllerTest {
         User user = dataPreparer.getUserList().get(0);
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + UserController.getAllUsersURL))
+                .get(controllerPath + UserController.GET_ALL_USERS_URL))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[0].userId").value(user.getId()))
@@ -241,7 +241,7 @@ class UserControllerTest {
         User user = dataPreparer.getUserList().get(0);
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + UserController.addFineURL)
+                .put(controllerPath + UserController.ADD_FINE_URL)
                 .queryParam("userId", user.getId().toString())
                 .queryParam("howMuch", String.valueOf(10.99)))
                 .andDo(print())
@@ -252,7 +252,7 @@ class UserControllerTest {
         
         
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + UserController.payFineURL)
+                .put(controllerPath + UserController.PAY_FINE_URL)
                 .queryParam("userId", user.getId().toString())
                 .queryParam("howMuch", String.valueOf(10.99)))
                 .andDo(print())
@@ -268,7 +268,7 @@ class UserControllerTest {
         User user = dataPreparer.getUserList().get(0);
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + UserController.payFineURL)
+                .put(controllerPath + UserController.PAY_FINE_URL)
                 .queryParam("userId", user.getId().toString())
                 .queryParam("howMuch", String.valueOf(10)))
                 .andDo(print())

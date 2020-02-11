@@ -38,7 +38,7 @@ class RentControllerTest {
         Rent rent = dataPreparer.getRentList().get(0);
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + RentController.findByIdURL)
+                .get(controllerPath + RentController.FIND_BY_ID_URL)
                 .queryParam("rentId", rent.getId().toString()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -49,7 +49,7 @@ class RentControllerTest {
     @Test
     void findRentByIdNotFound() throws Exception {
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + RentController.findByIdURL)
+                .get(controllerPath + RentController.FIND_BY_ID_URL)
                 .queryParam("rentId", String.valueOf(-1)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -61,7 +61,7 @@ class RentControllerTest {
         Book avbBook = dataPreparer.getBookList().stream().filter(book -> book.getBookStatus().equals(BookStatus.AVAILABLE)).findFirst().get();
 
         MvcResult result = mvc.perform(MockMvcRequestBuilders
-                .post(controllerPath + RentController.rentBookURL)
+                .post(controllerPath + RentController.RENT_BOOK_URL)
                 .queryParam("userId", user.getId().toString())
                 .queryParam("bookId", avbBook.getId().toString()))
                 .andDo(print())
@@ -76,14 +76,14 @@ class RentControllerTest {
         LocalDate dueDateLD = LocalDate.parse(dueDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + RentController.findByIdURL)
+                .get(controllerPath + RentController.FIND_BY_ID_URL)
                 .queryParam("rentId", createdRentId))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.rentId").value(createdRentId));
 
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + RentController.prolongURL)
+                .put(controllerPath + RentController.PROLONG_URL)
                 .queryParam("rentId", createdRentId))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -92,21 +92,21 @@ class RentControllerTest {
 
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + RentController.prolongURL)
+                .put(controllerPath + RentController.PROLONG_URL)
                 .queryParam("rentId", createdRentId))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
 
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + RentController.returnBookURL)
+                .put(controllerPath + RentController.RETURN_BOOK_URL)
                 .queryParam("rentId", createdRentId))
                 .andDo(print())
                 .andExpect(status().isOk());
 
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + RentController.findByIdURL)
+                .get(controllerPath + RentController.FIND_BY_ID_URL)
                 .queryParam("rentId", createdRentId))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -120,7 +120,7 @@ class RentControllerTest {
                 .count();
 
         MvcResult result = mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + RentController.countUserBooksURL)
+                .get(controllerPath + RentController.COUNT_USER_BOOKS_URL)
                 .queryParam("userId", String.valueOf(userId)))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -140,26 +140,26 @@ class RentControllerTest {
         String userId = rent.getUser().getId().toString();
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + RentController.findByIdURL)
+                .get(controllerPath + RentController.FIND_BY_ID_URL)
                 .queryParam("rentId", rentId))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.rentId").value(rentId));
 
         mvc.perform(MockMvcRequestBuilders
-                .put(controllerPath + RentController.reportLostURL)
+                .put(controllerPath + RentController.REPORT_LOST_URL)
                 .queryParam("rentId", rentId))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + RentController.findByIdURL)
+                .get(controllerPath + RentController.FIND_BY_ID_URL)
                 .queryParam("rentId", rentId))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
 //must pay fine
         mvc.perform(MockMvcRequestBuilders
-                .put("/library/user/" + UserController.payFineURL)
+                .put("/library/user/" + UserController.PAY_FINE_URL)
                 .queryParam("userId", userId)
                 .queryParam("howMuch", lostBook.getTitleInfo().getPrice().add(Fine.LOST_OR_DESTROYED).toString()))
                 .andDo(print())

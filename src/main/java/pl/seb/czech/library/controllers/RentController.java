@@ -16,39 +16,39 @@ public class RentController {
     private LibraryMapper libraryMapper;
     private RentService rentService;
     
-    public static final String findByIdURL = "findById";
-    public static final String rentBookURL = "rentBook";
-    public static final String countUserBooksURL = "countUserBooks";
-    public static final String returnBookURL = "returnBook";
-    public static final String reportLostURL = "reportLost";
-    public static final String prolongURL = "prolong";
+    public static final String FIND_BY_ID_URL = "findById";
+    public static final String RENT_BOOK_URL = "rentBook";
+    public static final String COUNT_USER_BOOKS_URL = "countUserBooks";
+    public static final String RETURN_BOOK_URL = "returnBook";
+    public static final String REPORT_LOST_URL = "reportLost";
+    public static final String PROLONG_URL = "prolong";
 
-    @RequestMapping(method = RequestMethod.GET, value = findByIdURL)
+    @RequestMapping(method = RequestMethod.GET, value = FIND_BY_ID_URL)
     public RentDto findRentById(@RequestParam Long rentId) {
         return libraryMapper.mapToRentDto(rentService.findRentById(rentId));
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = rentBookURL)
+    @RequestMapping(method = RequestMethod.POST, value = RENT_BOOK_URL)
     public RentDto rentBook(@RequestParam Long userId, @RequestParam Long bookId) {
         return libraryMapper.mapToRentDto(rentService.rentBook(userId, bookId));
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = countUserBooksURL)
+    @RequestMapping(method = RequestMethod.GET, value = COUNT_USER_BOOKS_URL)
     public Long countRentedBooksByUser(@RequestParam Long userId) {
         return rentService.countRentedBooksByUser(userId);
     }
     
-    @RequestMapping(method = RequestMethod.PUT, value = returnBookURL)
+    @RequestMapping(method = RequestMethod.PUT, value = RETURN_BOOK_URL)
     public void returnBook(@RequestParam Long rentId) {
         rentService.returnBook(rentId);
     }
     
-    @RequestMapping(method = RequestMethod.PUT, value = reportLostURL)
+    @RequestMapping(method = RequestMethod.PUT, value = REPORT_LOST_URL)
     public void reportLostDestroyed(@RequestParam Long rentId) {
         rentService.reportLostDestroyed(rentId);
     }
     
-    @RequestMapping(method = RequestMethod.PUT, value = prolongURL)
+    @RequestMapping(method = RequestMethod.PUT, value = PROLONG_URL)
     public RentDto prolongRent(@RequestParam Long rentId) {
         return libraryMapper.mapToRentDto(rentService.prolong(rentId));
     }

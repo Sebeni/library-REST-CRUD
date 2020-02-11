@@ -40,7 +40,7 @@ class TitleInfoControllerTest {
                 .count();
 
         MvcResult result = mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + TitleInfoController.getAvailableBooksURL)
+                .get(controllerPath + TitleInfoController.GET_AVAILABLE_BOOKS_URL)
                 .queryParam("title", titleInfo.getTitle()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -56,7 +56,7 @@ class TitleInfoControllerTest {
         TitleInfo titleInfo = dataPreparer.getTitleInfoList().get(0);
 
         MvcResult result = mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + TitleInfoController.getAllBooksURL)
+                .get(controllerPath + TitleInfoController.GET_ALL_BOOKS_URL)
                 .queryParam("title", titleInfo.getTitle()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -72,7 +72,7 @@ class TitleInfoControllerTest {
         TitleInfo titleInfo = dataPreparer.getTitleInfoList().get(0);
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + TitleInfoController.getAllBooksByAuthorURL)
+                .get(controllerPath + TitleInfoController.GET_ALL_BOOKS_BY_AUTHOR_URL)
                 .queryParam("authorName", titleInfo.getAuthor()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -85,7 +85,7 @@ class TitleInfoControllerTest {
         TitleInfo titleInfo = dataPreparer.getTitleInfoList().get(0);
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + TitleInfoController.getAllBooksByAuthorAndTitleURL)
+                .get(controllerPath + TitleInfoController.GET_ALL_BOOKS_BY_AUTHOR_AND_TITLE_URL)
                 .queryParam("authorName", titleInfo.getAuthor())
                 .queryParam("title", titleInfo.getTitle()))
                 .andDo(print())
@@ -98,7 +98,7 @@ class TitleInfoControllerTest {
         TitleInfo titleInfo = dataPreparer.getTitleInfoList().get(0);
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + TitleInfoController.getAllBooksByAuthorAndTitleURL)
+                .get(controllerPath + TitleInfoController.GET_ALL_BOOKS_BY_AUTHOR_AND_TITLE_URL)
                 .queryParam("authorName", titleInfo.getAuthor() + "test")
                 .queryParam("title", titleInfo.getTitle()))
                 .andDo(print())
@@ -112,7 +112,7 @@ class TitleInfoControllerTest {
         TitleInfoDto titleInfoDtoInputAlreadyInDB = new TitleInfoDto(null, titleInfo.getTitle(), titleInfo.getAuthor(), titleInfo.getPublicationYear(), titleInfo.getPrice());
         
         mvc.perform(MockMvcRequestBuilders
-        .post(controllerPath + TitleInfoController.addTitleInfo)
+        .post(controllerPath + TitleInfoController.ADD_TITLE_INFO_URL)
                 .content(new ObjectMapper().writeValueAsString(titleInfoDtoInputAlreadyInDB))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -125,7 +125,7 @@ class TitleInfoControllerTest {
         TitleInfo titleInfo = dataPreparer.getRentList().get(0).getBook().getTitleInfo();
 
         mvc.perform(MockMvcRequestBuilders
-                .delete(controllerPath + TitleInfoController.deleteByIdURL)
+                .delete(controllerPath + TitleInfoController.DELETE_BY_ID_URL)
                 .queryParam("titleInfoId", titleInfo.getId().toString()))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -134,7 +134,7 @@ class TitleInfoControllerTest {
     @Test
     void deleteByIdWhenIdNotFound() throws Exception {
         mvc.perform(MockMvcRequestBuilders
-                .delete(controllerPath + TitleInfoController.deleteByIdURL)
+                .delete(controllerPath + TitleInfoController.DELETE_BY_ID_URL)
                 .queryParam("titleInfoId", String.valueOf(-1)))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -149,7 +149,7 @@ class TitleInfoControllerTest {
         TitleInfoDto titleInfoDtoInputAlreadyInDB = new TitleInfoDto(null, title, titleInfo.getAuthor(), titleInfo.getPublicationYear(), titleInfo.getPrice());
         
         MvcResult result = mvc.perform(MockMvcRequestBuilders
-                .post(controllerPath + TitleInfoController.addTitleInfo)
+                .post(controllerPath + TitleInfoController.ADD_TITLE_INFO_URL)
                 .content(new ObjectMapper().writeValueAsString(titleInfoDtoInputAlreadyInDB))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -162,14 +162,14 @@ class TitleInfoControllerTest {
         String createdTitleInfoId = JsonPath.read(result.getResponse().getContentAsString(), "$.titleInfoId").toString();
         
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + TitleInfoController.getAllBooksByAuthorAndTitleURL)
+                .get(controllerPath + TitleInfoController.GET_ALL_BOOKS_BY_AUTHOR_AND_TITLE_URL)
                 .queryParam("authorName", titleInfo.getAuthor())
                 .queryParam("title", title))
                 .andDo(print())
                 .andExpect(status().isOk());
 
         mvc.perform(MockMvcRequestBuilders
-                .delete(controllerPath + TitleInfoController.deleteByIdURL)
+                .delete(controllerPath + TitleInfoController.DELETE_BY_ID_URL)
                 .queryParam("titleInfoId", createdTitleInfoId))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -181,7 +181,7 @@ class TitleInfoControllerTest {
         TitleInfo titleInfo = dataPreparer.getTitleInfoList().get(0);
 
         mvc.perform(MockMvcRequestBuilders
-                .get(controllerPath + TitleInfoController.getByIdURL)
+                .get(controllerPath + TitleInfoController.GET_BY_ID_URL)
                 .queryParam("titleInfoId", titleInfo.getId().toString()))
                 .andDo(print())
                 .andExpect(status().isOk())
