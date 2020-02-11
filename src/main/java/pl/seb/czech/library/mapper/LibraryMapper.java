@@ -23,7 +23,7 @@ public class LibraryMapper {
     }
 
     public Book mapToBook(BookDto bookDto) {
-        return new Book(mapToBook(bookDto).getTitleInfo(), bookDto.getBookStatus());
+        return new Book(mapToTitleInfo(bookDto.getTitleInfoDto()), bookDto.getBookStatus());
     }
 
     public RentDto mapToRentDto(Rent rent) {

@@ -20,13 +20,13 @@ public class DataPreparer implements ApplicationRunner {
     
     private List<User> userList = new ArrayList<>();
     private List<TitleInfo> titleInfoList = new ArrayList<>();
-    private List<Book> bookList = new ArrayList<>();
-    private List<Rent> rentList = new ArrayList<>();
+    private final List<Book> bookList = new ArrayList<>();
+    private final List<Rent> rentList = new ArrayList<>();
 
-    private BookRepository bookRepository;
-    private RentRepository rentRepository;
-    private TitleInfoRepository titleInfoRepository;
-    private UserRepository userRepository;
+    private final BookRepository bookRepository;
+    private final RentRepository rentRepository;
+    private final TitleInfoRepository titleInfoRepository;
+    private final UserRepository userRepository;
 
 
     public DataPreparer(BookRepository bookRepository, RentRepository rentRepository, TitleInfoRepository titleInfoRepository, UserRepository userRepository) {

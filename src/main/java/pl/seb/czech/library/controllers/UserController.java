@@ -1,14 +1,12 @@
 package pl.seb.czech.library.controllers;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import pl.seb.czech.library.domain.dto.UserDto;
 import pl.seb.czech.library.mapper.LibraryMapper;
 import pl.seb.czech.library.service.UserService;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor

@@ -13,7 +13,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.seb.czech.library.domain.*;
 import pl.seb.czech.library.initDB.DataPreparer;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -26,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class RentControllerTest {
 
-    private String controllerPath = "/library/rent/";
+    private final String controllerPath = "/library/rent/";
 
     @Autowired
     DataPreparer dataPreparer;

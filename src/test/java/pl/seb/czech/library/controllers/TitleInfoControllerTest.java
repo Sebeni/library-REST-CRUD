@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class TitleInfoControllerTest {
-    private String controllerPath = "/library/title/";
+    private final String controllerPath = "/library/title/";
 
     @Autowired
     DataPreparer dataPreparer;

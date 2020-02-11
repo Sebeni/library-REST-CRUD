@@ -14,11 +14,9 @@ import pl.seb.czech.library.domain.User;
 import pl.seb.czech.library.initDB.DataPreparer;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class UserControllerTest {
-    private String controllerPath = "/library/user/";
+    private final String controllerPath = "/library/user/";
 
     @Autowired
     DataPreparer dataPreparer;

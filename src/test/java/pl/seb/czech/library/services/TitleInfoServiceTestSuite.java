@@ -56,12 +56,6 @@ public class TitleInfoServiceTestSuite {
 
     }
 
-    private long findAllAvbBooksWithFilter(TitleInfo titleInfo) {
-        return titleInfo.getBookList().stream()
-                .filter(book -> book.getBookStatus().equals(BookStatus.AVAILABLE))
-                .count();
-    }
-
     @Test
     public void findByAuthorTest() {
         String author = "Georg Orwell";

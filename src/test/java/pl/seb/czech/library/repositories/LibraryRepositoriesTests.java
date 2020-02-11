@@ -85,13 +85,13 @@ class LibraryRepositoriesTests {
 
     private List<LocalDate> extractInitDate(List<Rent> rentList) {
         return rentList.stream()
-                .map(rent -> rent.getRentDate())
+                .map(Rent::getRentDate)
                 .collect(Collectors.toList());
     }
     
     private List<User> extractUser(List<Rent> rentList) {
         return rentList.stream()
-                .map(rent -> rent.getUser())
+                .map(Rent::getUser)
                 .collect(Collectors.toList());
     }
     

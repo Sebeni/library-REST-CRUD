@@ -1,7 +1,5 @@
 package pl.seb.czech.library.service;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.seb.czech.library.domain.User;
@@ -11,7 +9,6 @@ import pl.seb.czech.library.service.exceptions.DataNotFoundException;
 import pl.seb.czech.library.service.exceptions.RentException;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
